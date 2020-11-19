@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.questionType{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    cursor: default;
+    font-family: 'Montserrat', sans-serif;
+    scroll-behavior: smooth;
+    background-color: #222;
+    user-select: none;
+}
+
+h3 {
+    font-size: 30px;
+    padding: 30px;
+    color: #484848;
+}
+
+/*/DON'T NEED BEFORE/*/
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.content {
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.box_ {
+    width: 300px;
+    height: 400px;
+    background-color: #ffffffcb;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 5px 5px 6px #bbbbbb, -5px -5px 6px #c4c4c4;
+    transition: 0.3s;
+    margin: 30px;
+}
+
+.box_:hover {
+    box-shadow: 0px 5px 10px #858585;
+    transition: 0.3s;
+    transform: scale(1.2);
+}
+
+.box_ img {
+    width: 300px;
+    height: 400px;
+    transition: 0.3s;
+}
+
+.box_:hover img {
+    transform: scale(1.3);
+    transition: 0.3s;
+    filter: blur(3px);
+}
+
+.box_ p {
+    position: relative;
+    color: rgb(255, 255, 255);
+    z-index: 20;
+    text-align: center;
+    top: 0px;
+    border-radius: 5px;
+    padding: 20px 10px;
+    font-weight: 300;
+    width: 300px;
+    height: 400px;
+    display: inline-flex;
+    background-color: #272727cb;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.box_:hover p {
+    animation: toTop 0.3s both;
+}
+
+.btn_ {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 15px;
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 5px;
+    outline: none;
+    box-shadow: 0px 10px 6px #1f1f1f;
+    transition: 0.1s;
+}
+
+.btn_:hover {
+    background-color: #fff;
+    color: #363636;
+    box-shadow: none;
+    transform: translateY(3px);
+    transition: 0.1s;
+}
+
+@keyframes toTop {
+    0% {
+        top: 0px;
+    }
+    100% {
+        top: -404px;
+    }
+}
