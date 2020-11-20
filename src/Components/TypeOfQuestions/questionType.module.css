@@ -1,123 +1,90 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
-*{
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+a{
+    color: blanchedalmond;
+    text-decoration: none;
 }
 
-.questionType{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    cursor: default;
-    font-family: 'Montserrat', sans-serif;
-    scroll-behavior: smooth;
-    background-color: #222;
-    user-select: none;
+:root {
+	--d: 2500ms;
+	--angle: 90deg;
+	--gradX: 100%;
+	--gradY: 50%;
+	--c1: rgba(168, 239, 255, 1);
+	--c2: rgba(168, 239, 255, 0.1);
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 90deg;
+  inherits: true;
 }
 
-h3 {
-    font-size: 30px;
-    padding: 30px;
-    color: #484848;
+@property --gradX {
+  syntax: '<percentage>';
+  initial-value: 50%;
+  inherits: true;
 }
 
-/*/DON'T NEED BEFORE/*/
-
-.container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+@property --gradY {
+  syntax: '<percentage>';
+  initial-value: 0%;
+  inherits: true;
 }
 
-.content {
-    width: 100%;
-    height: 500px;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
+.questionType {
+	font-family: Raleway, sans-serif;
+	text-align: center;
+	padding: 1rem;
+	color: white;
+	min-height: 100vh;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
 }
 
-.box_ {
-    width: 300px;
-    height: 400px;
-    background-color: #ffffffcb;
-    overflow: hidden;
-    border-radius: 5px;
-    box-shadow: 5px 5px 6px #bbbbbb, -5px -5px 6px #c4c4c4;
-    transition: 0.3s;
-    margin: 30px;
+
+.wrapper {
+	min-width: min(40rem, 100%);
 }
 
-.box_:hover {
-    box-shadow: 0px 5px 10px #858585;
-    transition: 0.3s;
-    transform: scale(1.2);
+.box {
+	font-size: 3vw;
+	margin: max(1rem, 3vw);
+	border: 0.35rem solid;
+	padding: 3vw;
+	border-image: conic-gradient(from var(--angle), var(--c2), var(--c1) 0.1turn, var(--c1) 0.15turn, var(--c2) 0.25turn) 30;
+	animation: borderRotate var(--d) linear infinite forwards;
 }
 
-.box_ img {
-    width: 300px;
-    height: 400px;
-    transition: 0.3s;
+.box:nth-child(2) {
+	border-image: radial-gradient(ellipse at var(--gradX) var(--gradY), var(--c1), var(--c1) 10%, var(--c2) 40%) 30;
+	animation: borderRadial var(--d) linear infinite forwards;
 }
 
-.box_:hover img {
-    transform: scale(1.3);
-    transition: 0.3s;
-    filter: blur(3px);
+@keyframes borderRotate {
+	100% {
+		--angle: 420deg;
+	}
 }
 
-.box_ p {
-    position: relative;
-    color: rgb(255, 255, 255);
-    z-index: 20;
-    text-align: center;
-    top: 0px;
-    border-radius: 5px;
-    padding: 20px 10px;
-    font-weight: 300;
-    width: 300px;
-    height: 400px;
-    display: inline-flex;
-    background-color: #272727cb;
-    align-items: flex-end;
-    flex-wrap: wrap;
-}
-
-.box_:hover p {
-    animation: toTop 0.3s both;
-}
-
-.btn_ {
-    display: block;
-    margin: 10px auto;
-    padding: 10px 15px;
-    background: none;
-    border: 2px solid #fff;
-    color: #fff;
-    border-radius: 5px;
-    outline: none;
-    box-shadow: 0px 10px 6px #1f1f1f;
-    transition: 0.1s;
-}
-
-.btn_:hover {
-    background-color: #fff;
-    color: #363636;
-    box-shadow: none;
-    transform: translateY(3px);
-    transition: 0.1s;
-}
-
-@keyframes toTop {
-    0% {
-        top: 0px;
-    }
-    100% {
-        top: -404px;
-    }
+@keyframes borderRadial {
+	20% {
+		--gradX: 100%;
+		--gradY: 50%;
+	}
+	40% {
+		--gradX: 100%;
+		--gradY: 100%;
+	}
+	60% {
+		--gradX: 50%;
+		--gradY: 100%;
+	}
+	80% {
+		--gradX: 0%;
+		--gradY: 50%;
+	}
+	100% {
+		--gradX: 50%;
+		--gradY: 0%;
+	}
 }

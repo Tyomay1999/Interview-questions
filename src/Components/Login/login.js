@@ -15,7 +15,7 @@ import './login.css';
 
 // const buttons = document.querySelectorAll('.form-container button')
 
-const Login = () => {
+const Login = ({history}) => {
     const [isActive,changeActive] = useState(false);
     return (
         <>
@@ -26,6 +26,7 @@ const Login = () => {
                             <h1>Register</h1>
                             <input placeholder="Username" />
                             <input placeholder="Password" />
+                            <input placeholder="Confirm Password" />
                             <p>Forgot your password?</p>
                             <button onClick={() => {console.log('registere')}}>Register</button>
                         </form>
@@ -37,7 +38,7 @@ const Login = () => {
                             <input placeholder="Username" />
                             <input placeholder="Password" />
                             <p>Forgot your password?</p>
-                            <button onClick={() => {console.log('Login')}}>Login</button>
+                            <button onClick={() => {history.push('/')}}>Login</button>
                         </form>
                     </div>
                     <div className="overlay-container">

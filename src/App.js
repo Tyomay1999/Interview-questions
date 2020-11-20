@@ -8,7 +8,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <Route path='/' exact component={QuestionType} />
-        <Route path="/register" component={Login} />
+        <Route path="/login" component={Login} />
       </BrowserRouter>
     </>
   );
