@@ -10,12 +10,10 @@ const QuestionType = () => {
                 <div className={questionType.box}>
                     <Link to='/JavaScript'>JavaScript</Link>
                 </div>
-
                 <div className={questionType.box}>
                      <Link to='/React'>React JS</Link>
                 </div>
             </div>
-
         </section >
     )
 }
