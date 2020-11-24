@@ -57,7 +57,7 @@ button {
   margin: 7px;
   border-radius: 6px;
   padding: 12px 24px;
-  background: #ffffff14;
+  background: #ffffff25;
   border: 1px solid #fff;
   color: #fff;
   cursor: pointer;
@@ -119,9 +119,9 @@ input::placeholder {
   z-index: 1;
 }
 .form-container button {
-  background: rgb(116, 116, 116);
+  background: linear-gradient(270deg, #270fff, #0f6fff);
   border: 1px solid rgb(116, 116, 116);
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
 }
 .form-container button:hover {
   background: transparent;

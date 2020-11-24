@@ -2,12 +2,14 @@ import React from 'react';
 import Login from './Components/Login/login';
 import { BrowserRouter, Route } from "react-router-dom";
 import QuestionType from './Components/TypeOfQuestions/questionType';
+import Question from './Components/Question/question';
 
 const App = () => {
   return (
       <BrowserRouter>
-        <Route path="/login"exact component={Login} />
-        <Route path='/'  component={QuestionType} />
+        <Route path="/login"  component={Login} />
+        <Route path='/' exact  component={QuestionType} />
+        <Route path='/question' exact  component={Question} />
       </BrowserRouter>
   );
 }

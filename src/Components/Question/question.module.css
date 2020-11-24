@@ -1,0 +1,186 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  .question {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* height: 80vh; */
+    width: 100%;
+    font-family: helvetica neue, helvetica, arial, sans-serif;
+    font-weight: 200;
+  }
+  
+  #modal_container {
+    position: fixed;
+    display: table;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transform: scale(0);
+    z-index: 1;
+  }
+  #modal_container.one {
+    transform: scaleY(0.01) scaleX(0);
+    animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+  #modal_container.one .modal_background .modal {
+    transform: scale(0);
+    animation: zoomIn 0.5s 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+  #modal_container.one.out {
+    transform: scale(1);
+    animation: unfoldOut 1s 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+  #modal_container.one.out .modal_background .modal {
+    animation: zoomOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+  
+  
+  #modal_container .modal_background {
+    display: table-cell;
+    background: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    vertical-align: middle;
+  }
+  #modal_container .modal_background .modal {
+    background:  linear-gradient(100deg,#272a36,#4f91f3 );
+    /* background:  linear-gradient(100deg,#17181c,#b9d2f8 ); */
+    padding: 50px;
+    display: inline-block;
+    font-weight: 300;
+    position: relative;
+  }
+  #modal_container .modal_background .modal h2 {
+    font-size: 25px;
+    line-height: 25px;
+    margin-bottom: 15px;
+  }
+  #modal_container .modal_background .modal p {
+    font-size: 18px;
+    line-height: 22px;
+  }
+  #modal_container .modal_background  .modal-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 3px;
+  }
+  .modal{
+    color: whitesmoke;
+    width: 70%;
+    border-radius: 20px;
+  }
+
+  
+  @keyframes unfoldIn {
+    0% {
+      transform: scaleY(0.005) scaleX(0);
+    }
+    50% {
+      transform: scaleY(0.005) scaleX(1);
+    }
+    100% {
+      transform: scaleY(1) scaleX(1);
+    }
+  }
+  @keyframes unfoldOut {
+    0% {
+      transform: scaleY(1) scaleX(1);
+    }
+    50% {
+      transform: scaleY(0.005) scaleX(1);
+    }
+    100% {
+      transform: scaleY(0.005) scaleX(0);
+    }
+  }
+  @keyframes zoomIn {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes zoomOut {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  label input {
+    position: absolute;
+    left: -9999px;
+  }
+  label input:checked + span {
+    color: #17181c;
+  
+    background-color: #def12f;
+  }
+  label input:checked + span:before {
+    background-color: rgb(51, 253, 1);
+  
+    box-shadow: inset 0 0 2px 5px #3987ec;
+  }
+  label span {
+    font-size:20px;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-align: center;
+            align-items: center;
+    padding: 3px;
+    border-radius: 30px;
+    -webkit-transition: 0.25s ease;
+    transition: 0.25s ease;
+  }
+  label span:hover {
+    margin: 5px;
+    font-size: 19.8px;
+    background:  linear-gradient(100deg,#4f91f3,#4277b4 );
+  }
+  label span:before {
+    display: -webkit-box;
+    display: flex;
+    flex-shrink: 0;
+    content: "";
+    background-color: rgb(255, 255, 255);
+    width: 20px;
+    height: 20px;
+    border-radius: 25px;
+    margin-right:3px;
+    -webkit-transition: 0.25s ease;
+    transition: 0.25s ease;
+    box-shadow: inset 0 0 0 5px #1b1bb6;
+  }
+  
+  .confirmAnswer ,.lastQuestion{
+    margin-top: 15px;
+    background: none;
+    border: 1px solid;
+    border-radius: 30px;
+    font: inherit;
+    line-height: 1;
+    /* margin: 3px; */
+    padding: 12px 7px;
+    -webkit-transition: 0.25s;
+    transition: 0.25s;
+  }
+  
+  .confirmAnswer:hover,
+  .confirmAnswer:focus {
+    color: rgb(255, 255, 255);
+    box-shadow: inset 0 -3.25em 0 0 #94e458;
+  }
+  
+  .lastQuestion:hover,
+  .lastQuestion:focus {
+    box-shadow: inset 0 -3.25em 0 0 #3d73e9;
+  }
+  
