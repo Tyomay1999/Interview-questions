@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import Loading from '../Loading/loading';
-import { Redirect } from 'react-router-dom';
+import '../Login/button.css';
+// import { Redirect } from 'react-router-dom';
 import firebase from 'firebase/app';
 import questionModal from './question.module.css';
 import 'firebase/database';
 import 'firebase/auth';
 const Question = (prop) => {
-    const {location} = prop
+    const { location } = prop
     // firebase.database().ref('JavaScript').push()
     // if (!location.staticContext){ return <Redirect to="/" />};
-    console.log("======================", location.staticContext)
-    const [questionNum, setQuestionNum] = useState(0)
-    const [answers, setAnswers] = useState([])
-    const [result, setResult] = useState(false)
-    const [data, getData] = useState(null)
-    const [loading, isLoading] = useState(true)
-    const [radioValue, isRadioValue] = useState('')
-    console.log("🚀 ~ ````````````~~~~~~~~~~~~~~~~~~~~~~````````````~ radioValue", radioValue)
+    const [questionNum, setQuestionNum] = useState(28);
+    const [viewResult, getViewResult] = useState(0);
+    const [answers, setAnswers] = useState([]);
+    const [trueAnswers, setTrueAnswers] = useState([]);
+    const [result, setResult] = useState(false);
+    const [data, getData] = useState(null);
+    const [loading, isLoading] = useState(true);
+    const [radioValue, setRadioValue] = useState('');
     if (!data && location.staticContext) {
-        // isLoading(!loading)
         firebase.database().ref(`${location.staticContext}`).on("value", question => {
             let questionlist = [];
             question.forEach(item => {
@@ -28,28 +28,35 @@ const Question = (prop) => {
             isLoading(!loading)
         });
     }
-    const nextQuestion = () => {
+    const nextQuestion = (valueInRadio) => {
+        answers.push(valueInRadio);
+        trueAnswers.push(data[0].questions[questionNum].trueAnsver)
+        setAnswers(answers)
+        setTrueAnswers(trueAnswers)
+        setRadioValue('')
         if (data[0].questions[questionNum].next) {
             setQuestionNum((questionNum + 1))
         } else {
-            setResult(!result)
+            resultFun()
         }
     }
-    const answersFun = () => {
+    const resultFun = () => {
+        setResult(!result);
+        let trueAnswersOnQuestions = 0;
+        trueAnswers.forEach((item,index) => {
+        if(item === answers[index]){
+            trueAnswersOnQuestions += 1
+        }
+        });
+        getViewResult(trueAnswersOnQuestions)
+    }
 
-    }
-    const onChangeValue = (event) => {
-        console.log(event);
-    }
-    
-    console.log("🚀 ~ file: question.js ~ line 97 ~ Question ~ prop", prop)
+
     if (loading) {
         return (
             <Loading />
         )
     }
-
-    console.log("🚀 ~ file: question.js ~ line 9 ~ Question ~ data", data[0])
 
     return (
         <div className={questionModal.question}  >
@@ -62,19 +69,25 @@ const Question = (prop) => {
                         </h1>
                         <div className={questionModal.questionCode} >
                             {data[0].questions[questionNum].questionTyupe ? data[0].questions[questionNum].questionCode.map((line, index) => {
+       
                                 return (
                                     <p key={index}>{line}</p>
                                 )
                             }) : ''
                             }
                         </div>
-                        <div className={questionModal.answers}   >
+                        <div className={questionModal.answers} >
                             <form >
                                 {
                                     data[0].questions[questionNum].ansvers.map((rad, index) => {
                                         return (
-                                            <label key={index}  >
-                                                <input type="radio" name="radio"  value={rad} onClick={(e) => {isRadioValue(e.target.value)}} />
+                                            <label key={index} >
+                                                <input
+                                                    type="radio"
+                                                    name="radio"
+                                                    value={rad}
+                                                    onClick={(e) => { setRadioValue(e.target.value) }}
+                                                 />
                                                 <span>
                                                     {rad}
                                                 </span>
@@ -86,9 +99,9 @@ const Question = (prop) => {
                         </div>
                         <button
                             className={questionModal.confirmAnswer}
-                            disabled={radioValue? '' : 'disabled'}
+                            disabled={radioValue ? '' : 'disabled'}
                             onClick={() => {
-                                nextQuestion()
+                                nextQuestion(radioValue)
                             }}
                         >
                             {data[0].questions[questionNum].next ? 'Next question' : 'Finish'}
