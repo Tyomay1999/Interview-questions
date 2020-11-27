@@ -11,7 +11,14 @@
     font-family: helvetica neue, helvetica, arial, sans-serif;
     font-weight: 200;
   }
-  
+  /*  */
+  .questionCode{
+    width: auto;
+    color: wheat;
+    background-color: rgb(67, 106, 199);
+    border-radius: 13px;
+  }
+  /*  */
   #modal_container {
     position: fixed;
     display: table;
