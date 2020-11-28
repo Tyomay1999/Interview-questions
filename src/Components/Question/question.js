@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
 import Loading from '../Loading/loading';
 import { getData, nextQuestion } from '../../functions'
 import { Link } from "react-router-dom";
 
-// import { Redirect } from 'react-router-dom';
 import questionModal from './question.module.css';
 
-const Question = ({ location }) => {
+const Question = ({location}) => {
     const { questionType } = location;
     // firebase.database().ref('JavaScript').push()
-    // if (!location.staticContext){ return <Redirect to="/" />};
     const [questionNum, setQuestionNum] = useState(28);
     const [viewResult, getViewResult] = useState(0);
     const [answers, setAnswers] = useState([]);
@@ -19,19 +18,22 @@ const Question = ({ location }) => {
     const [data, setData] = useState(null);
     const [loading, isLoading] = useState(true);
     const [radioValue, setRadioValue] = useState('');
-
+    
     if (!data && questionType) {
         getData(setData, isLoading, loading, questionType)
     }
     
+if (questionType == undefined) {
+    return <Redirect to='/notFound'/>
+};
     if (loading) {
         return (
             <Loading />
-        )
-    }
-
-    return (
-        <div className={questionModal.question}  >
+            )
+        }
+        
+        return (
+            <div className={questionModal.question}  >
             <div className={result ? `${questionModal.result}` : `${questionModal.close}`}>
                 <div className={questionModal.infoButons} >
                     <h1 className={resultWindow ? `${questionModal.result}` : `${questionModal.close}`}>You typed {viewResult} out of {data[0].totalQuestion} </h1>
