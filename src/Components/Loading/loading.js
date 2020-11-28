@@ -1,5 +1,5 @@
 import React from 'react';
-import './loading.css'
+import loadingModule from './loading.module.css';
 
 const Loading = () => {
     return(

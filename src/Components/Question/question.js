@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Loading from '../Loading/loading';
-import '../Login/button.css';
+import { getData, nextQuestion } from '../../functions'
+import { Link } from "react-router-dom";
+
 // import { Redirect } from 'react-router-dom';
-import firebase from 'firebase/app';
 import questionModal from './question.module.css';
-import 'firebase/database';
-import 'firebase/auth';
-const Question = (prop) => {
-    const { location } = prop
+
+const Question = ({ location }) => {
+    const { questionType } = location;
     // firebase.database().ref('JavaScript').push()
     // if (!location.staticContext){ return <Redirect to="/" />};
     const [questionNum, setQuestionNum] = useState(28);
@@ -15,43 +15,15 @@ const Question = (prop) => {
     const [answers, setAnswers] = useState([]);
     const [trueAnswers, setTrueAnswers] = useState([]);
     const [result, setResult] = useState(false);
-    const [data, getData] = useState(null);
+    const [resultWindow, setResultWindow] = useState(false);
+    const [data, setData] = useState(null);
     const [loading, isLoading] = useState(true);
     const [radioValue, setRadioValue] = useState('');
-    if (!data && location.staticContext) {
-        firebase.database().ref(`${location.staticContext}`).on("value", question => {
-            let questionlist = [];
-            question.forEach(item => {
-                questionlist.push(item.val());
-            });
-            getData(questionlist)
-            isLoading(!loading)
-        });
-    }
-    const nextQuestion = (valueInRadio) => {
-        answers.push(valueInRadio);
-        trueAnswers.push(data[0].questions[questionNum].trueAnsver)
-        setAnswers(answers)
-        setTrueAnswers(trueAnswers)
-        setRadioValue('')
-        if (data[0].questions[questionNum].next) {
-            setQuestionNum((questionNum + 1))
-        } else {
-            resultFun()
-        }
-    }
-    const resultFun = () => {
-        setResult(!result);
-        let trueAnswersOnQuestions = 0;
-        trueAnswers.forEach((item,index) => {
-        if(item === answers[index]){
-            trueAnswersOnQuestions += 1
-        }
-        });
-        getViewResult(trueAnswersOnQuestions)
-    }
 
-
+    if (!data && questionType) {
+        getData(setData, isLoading, loading, questionType)
+    }
+    
     if (loading) {
         return (
             <Loading />
@@ -60,6 +32,14 @@ const Question = (prop) => {
 
     return (
         <div className={questionModal.question}  >
+            <div className={result ? `${questionModal.result}` : `${questionModal.close}`}>
+                <div className={questionModal.infoButons} >
+                    <h1 className={resultWindow ? `${questionModal.result}` : `${questionModal.close}`}>You typed {viewResult} out of {data[0].totalQuestion} </h1>
+                    <button className={!resultWindow ? `${questionModal.button}` : `${questionModal.close}`} onClick={() => { setResultWindow(!resultWindow) }}>Result</button>
+                    <Link className={questionModal.button}  to='/'>Home</Link>
+
+                </div>
+            </div>
             <div id={questionModal.modal_container} className={result ? `${questionModal.one} ${questionModal.out}` : `${questionModal.one}`}>
                 <div className={questionModal.modal_background} key={questionNum + 1}>
                     <div className={questionModal.modal} >
@@ -68,12 +48,12 @@ const Question = (prop) => {
                             {data[0].questions[questionNum].question}
                         </h1>
                         <div className={questionModal.questionCode} >
-                            {data[0].questions[questionNum].questionTyupe ? data[0].questions[questionNum].questionCode.map((line, index) => {
-       
-                                return (
-                                    <p key={index}>{line}</p>
-                                )
-                            }) : ''
+                            {
+                                data[0].questions[questionNum].questionTyupe ? data[0].questions[questionNum].questionCode.map((line, index) => {
+                                    return (
+                                        <p key={index}>{line}</p>
+                                    )
+                                }) : ''
                             }
                         </div>
                         <div className={questionModal.answers} >
@@ -87,7 +67,7 @@ const Question = (prop) => {
                                                     name="radio"
                                                     value={rad}
                                                     onClick={(e) => { setRadioValue(e.target.value) }}
-                                                 />
+                                                />
                                                 <span>
                                                     {rad}
                                                 </span>
@@ -101,12 +81,13 @@ const Question = (prop) => {
                             className={questionModal.confirmAnswer}
                             disabled={radioValue ? '' : 'disabled'}
                             onClick={() => {
-                                nextQuestion(radioValue)
+                                nextQuestion(data, setRadioValue, radioValue, answers, setAnswers, trueAnswers, setTrueAnswers, questionNum, setQuestionNum, result, setResult, getViewResult)
                             }}
                         >
                             {data[0].questions[questionNum].next ? 'Next question' : 'Finish'}
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>

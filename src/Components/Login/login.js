@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
+import { chackUser,checkPassword } from '../../functions'
 import './login.css';
 import './button.css'
 
@@ -22,54 +20,7 @@ const Login = ({ history }) => {
         conPassword: '',
         email: ''
     };
-    const createAcaunte = () => {
-        const { email, password } = loginAndPassword;
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(resp => {
-                let isSineIn = resp.operationType
-                if (isSineIn === 'signIn') {
-                    setLoading(false)
-                    changeActive(!isActive)
-                }
-            })
-            .catch(errore => {
-                setRegisterErrorMessage(`${errore.message}`)
-            })
-    }
-    const checkPassword = () => {
-        if (loginAndPassword.password !== '') {
-            if (loginAndPassword.password === loginAndPassword.conPassword) {
-                setRegisterErrorMessage('')
-                createAcaunte()
-            } else {
-                setLoading(false)
-                setRegisterErrorMessage('passwords did not match')
-            }
-        }else{
-            setLoading(false)
-            setRegisterErrorMessage('Password is none')
-        }
-    }
-    const chackUser = () => {
-        const { email, password } = loginAndPassword;
 
-        if (email && password) {
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(resp => {
-                    let isSineIn = resp.operationType
-                    if (isSineIn === 'signIn') {
-                        history.push('/')
-                    }
-                })
-                .catch(error => {
-                    setLoading(false)
-                    setLoginErrorMessage(`${error.message}`)
-                })
-        } else {
-            setLoading(false)
-            setLoginErrorMessage('Email or password is none')
-        }
-    }
     return (
         <>
             <div className='login'>
@@ -105,9 +56,8 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <p>{registerErrorMessage}</p>
-                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);checkPassword() }}>Register</button>
+                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);checkPassword(loginAndPassword,setRegisterErrorMessage,setLoading,changeActive,isActive) }}>Register</button>
                         </div>
-
                     </div>
                     <div className="form-container sign-in-container">
                         <div className='form'>
@@ -131,7 +81,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <p>{loginErrorMessage}</p>
-                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);chackUser() }}>Login</button>
+                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);chackUser(loginAndPassword,setLoading,setLoginErrorMessage,history) }}>Login</button>
                         </div>
                     </div>
                     <div className="overlay-container">

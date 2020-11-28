@@ -18,7 +18,7 @@ const QuestionType = () => {
                         className={questionType.btns}
                         to={{
                             pathname: "/question",
-                            staticContext: 'JavaScript'
+                            questionType: 'JavaScript'
                         }}>Start</Link>
                     </div>
                 </div>
@@ -35,7 +35,7 @@ const QuestionType = () => {
                         className={questionType.btns}
                         to={{
                             pathname: "/question",
-                            staticContext: 'ReactJS'
+                            questionType: 'ReactJS'
                         }}>Start</Link>
                     </div>
                 </div>
