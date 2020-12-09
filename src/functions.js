@@ -2,57 +2,6 @@ import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
 
-export const createAcaunte = (loginAndPassword,setLoading,changeActive,setRegisterErrorMessage,isActive) => {
-    const { email, password } = loginAndPassword;
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(resp => {
-            let isSineIn = resp.operationType
-            if (isSineIn === 'signIn') {
-                setLoading(false)
-                changeActive(!isActive)
-            }
-        })
-        .catch(errore => {
-            setRegisterErrorMessage(`${errore.message}`)
-        })
-}
-
-
-export const checkPassword = (loginAndPassword,setRegisterErrorMessage,createAcaunte,setLoading,changeActive,isActive) => {
-    if (loginAndPassword.password !== '') {
-        if (loginAndPassword.password === loginAndPassword.conPassword) {
-            setRegisterErrorMessage('')
-            createAcaunte(loginAndPassword,setLoading,changeActive,setRegisterErrorMessage,isActive)
-        } else {
-            setLoading(false)
-            setRegisterErrorMessage('passwords did not match')
-        }
-    }else{
-        setLoading(false)
-        setRegisterErrorMessage('Password is none')
-    }
-}
-
-export const chackUser = (loginAndPassword,setLoading,setLoginErrorMessage, history) => {
-    const { email, password } = loginAndPassword;
-
-    if (email && password) {
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(resp => {
-                let isSineIn = resp.operationType
-                if (isSineIn === 'signIn') {
-                    history.push('/')
-                }
-            })
-            .catch(error => {
-                setLoading(false)
-                setLoginErrorMessage(`${error.message}`)
-            })
-    } else {
-        setLoading(false)
-        setLoginErrorMessage('Email or password is none')
-    }
-}
 
 export const getData = (setData,isLoading,loading,questionType) => {
     firebase.database().ref(`${questionType}`).on("value", question => {
@@ -60,6 +9,20 @@ export const getData = (setData,isLoading,loading,questionType) => {
         question.forEach(item => {
             questionlist.push(item.val());
         });
+        if(questionlist){
+            for(let i = 1; i < questionlist.length; i++ ){
+                let num = 0;
+                questionlist[0].questions.forEach(item => {
+                    if(item.question === questionlist[i].question){
+                        num += 1
+                    }
+                })
+                if(!num){
+                    questionlist[0].questions.push(questionlist[i])
+                }
+            }
+            questionlist[0].totalQuestion = questionlist[0].questions.length
+        }
         setData(questionlist)
         isLoading(!loading)
     })
@@ -75,13 +38,13 @@ const getResult = (trueAnswers,answers,getViewResult) => {
     getViewResult(trueAnswersOnQuestions)
 }
 
-export const nextQuestion = (data,setRadioValue,radioValue,answers,setAnswers,trueAnswers,setTrueAnswers,questionNum,setQuestionNum,result,setResult,getViewResult) => {
+export const nextQuestion = (data,setRadioValue,radioValue,answers,setAnswers,trueAnswers,setTrueAnswers,questionNum,setQuestionNum,result,setResult,getViewResult,totalQuestion) => {
     answers.push(radioValue);
     trueAnswers.push(data[0].questions[questionNum].trueAnsver)
     setAnswers(answers)
     setTrueAnswers(trueAnswers)
     setRadioValue('')
-    if (data[0].questions[questionNum].next) {
+    if (questionNum + 1 < totalQuestion) {
         setQuestionNum((questionNum + 1))
     } else {
          setResult(!result);

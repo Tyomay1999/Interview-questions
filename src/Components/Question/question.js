@@ -3,13 +3,10 @@ import { Redirect } from 'react-router-dom';
 import Loading from '../Loading/loading';
 import { getData, nextQuestion } from '../../functions'
 import { Link } from "react-router-dom";
-
 import questionModal from './question.module.css';
-
-const Question = ({location}) => {
+const Question = ({ location }) => {
     const { questionType } = location;
-    // firebase.database().ref('JavaScript').push()
-    const [questionNum, setQuestionNum] = useState(28);
+    const [questionNum, setQuestionNum] = useState(0);
     const [viewResult, getViewResult] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [trueAnswers, setTrueAnswers] = useState([]);
@@ -18,28 +15,31 @@ const Question = ({location}) => {
     const [data, setData] = useState(null);
     const [loading, isLoading] = useState(true);
     const [radioValue, setRadioValue] = useState('');
-    
+
     if (!data && questionType) {
         getData(setData, isLoading, loading, questionType)
     }
-    
-if (questionType == undefined) {
-    return <Redirect to='/notFound'/>
-};
+
+    if (questionType == undefined) {
+        return <Redirect to='/notFound' />
+    }
     if (loading) {
         return (
             <Loading />
-            )
-        }
-        
-        return (
-            <div className={questionModal.question}  >
+        )
+    }
+
+    return (
+        <div className={questionModal.question}  >
             <div className={result ? `${questionModal.result}` : `${questionModal.close}`}>
                 <div className={questionModal.infoButons} >
                     <h1 className={resultWindow ? `${questionModal.result}` : `${questionModal.close}`}>You typed {viewResult} out of {data[0].totalQuestion} </h1>
                     <button className={!resultWindow ? `${questionModal.button}` : `${questionModal.close}`} onClick={() => { setResultWindow(!resultWindow) }}>Result</button>
-                    <Link className={questionModal.button}  to='/'>Home</Link>
-
+                    <Link className={questionModal.button} to='/questions'>Home</Link>
+                    <Link className={questionModal.button} to={{
+                        pathname: "/CreateNewQuestion",
+                        isLogin: 'true'
+                    }}>Create new question</Link>
                 </div>
             </div>
             <div id={questionModal.modal_container} className={result ? `${questionModal.one} ${questionModal.out}` : `${questionModal.one}`}>
@@ -62,19 +62,21 @@ if (questionType == undefined) {
                             <form >
                                 {
                                     data[0].questions[questionNum].ansvers.map((rad, index) => {
-                                        return (
-                                            <label key={index} >
-                                                <input
-                                                    type="radio"
-                                                    name="radio"
-                                                    value={rad}
-                                                    onClick={(e) => { setRadioValue(e.target.value) }}
-                                                />
-                                                <span>
-                                                    {rad}
-                                                </span>
-                                            </label>
-                                        )
+                                        if(rad !== ''){
+                                            return (
+                                                <label key={index} >
+                                                    <input
+                                                        type="radio"
+                                                        name="radio"
+                                                        value={rad}
+                                                        onClick={(e) => { setRadioValue(e.target.value) }}
+                                                    />
+                                                    <span>
+                                                        {rad}
+                                                    </span>
+                                                </label>
+                                            )
+                                        }
                                     })
                                 }
                             </form>
@@ -83,10 +85,10 @@ if (questionType == undefined) {
                             className={questionModal.confirmAnswer}
                             disabled={radioValue ? '' : 'disabled'}
                             onClick={() => {
-                                nextQuestion(data, setRadioValue, radioValue, answers, setAnswers, trueAnswers, setTrueAnswers, questionNum, setQuestionNum, result, setResult, getViewResult)
+                                nextQuestion(data, setRadioValue, radioValue, answers, setAnswers, trueAnswers, setTrueAnswers, questionNum, setQuestionNum, result, setResult, getViewResult,data[0].totalQuestion)
                             }}
                         >
-                            {data[0].questions[questionNum].next ? 'Next question' : 'Finish'}
+                            {(questionNum + 1 < data[0].totalQuestion ) ? 'Next question' : 'Finish'}
                         </button>
                     </div>
 

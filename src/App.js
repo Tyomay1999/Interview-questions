@@ -4,14 +4,16 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import QuestionType from './Components/TypeOfQuestions/questionType';
 import Question from './Components/Question/question';
 import NotFound from './Components/NotFound/notFound';
+import CreateQuestion from './Components/CreateQuestion/createQuestion';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path='/'  component={QuestionType} />
+        <Route exact path="/" component={Login} />
+        <Route exact path='/questions'  component={QuestionType} />
         <Route path='/question' component={Question} />
+        <Route path='/CreateNewQuestion' component={CreateQuestion}/>
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

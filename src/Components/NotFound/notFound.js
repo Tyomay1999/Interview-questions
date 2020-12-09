@@ -7,7 +7,7 @@ const NotFound = () => {
         <div className={notFoundModule.notFound}>
             <h1 className={notFoundModule.number}>404</h1>
             <p className={notFoundModule.notFoundText}>Oops! Something is wrong.</p>
-            <Link className={notFoundModule.button} to="/login"> Go back</Link>
+            <Link className={notFoundModule.button} to="/"> Go back</Link>
         </div>
     )
 }

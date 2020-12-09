@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { chackUser,checkPassword } from '../../functions'
 import './login.css';
 import './button.css'
-
+import firebase from 'firebase/app';
+import 'firebase/database';
+import 'firebase/auth';
+// firebase.database().ref('JavaScript').push()
 
 const Login = ({ history }) => {
-
     let Reg = {
         emailReg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         passwordReg: /^[a-z0-9_$-]{7,30}$/i
@@ -13,13 +14,67 @@ const Login = ({ history }) => {
     const [isActive, changeActive] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState('');
     const [loginErrorMessage, setLoginErrorMessage] = useState('');
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     let loginAndPassword = {
         password: '',
         conPassword: '',
         email: ''
     };
+
+
+     const createAcaunte = () => {
+        const { email, password } = loginAndPassword;
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(resp => {
+                let isSineIn = resp.operationType
+                if (isSineIn == 'signIn') {
+                    setLoading(false)
+                    changeActive(!isActive)
+                }
+            })
+            .catch(errore => {
+                setRegisterErrorMessage(`${errore.message}`)
+            })
+    }
+    
+    
+     const checkPassword = () => {
+        if (loginAndPassword.password !== '') {
+            if (loginAndPassword.password === loginAndPassword.conPassword) {
+                setRegisterErrorMessage('')
+                createAcaunte()
+            } else {
+                setLoading(false)
+                setRegisterErrorMessage('passwords did not match')
+            }
+        }else{
+            setLoading(false)
+            setRegisterErrorMessage('Password is none')
+        }
+    }
+    
+     const chackUser = () => {
+        const { email, password } = loginAndPassword;
+    
+        if (email && password) {
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(resp => {
+                    let isSineIn = resp.operationType
+                    if (isSineIn == 'signIn') {
+                        history.push('/questions')
+                    }
+                })
+                .catch(error => {
+                    setLoading(false)
+                    setLoginErrorMessage(`${error.message}`)
+                })
+        } else {
+            setLoading(false)
+            setLoginErrorMessage('Email or password is none')
+        }
+    }
+    
 
     return (
         <>
@@ -56,7 +111,13 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <p>{registerErrorMessage}</p>
-                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);checkPassword(loginAndPassword,setRegisterErrorMessage,setLoading,changeActive,isActive) }}>Register</button>
+                            <button
+                                className={loading ? 'btn is-active' : 'btn'}
+                                onClick={() => {
+                                    setLoading(!loading);
+                                    checkPassword()
+                                }}>
+                                Register</button>
                         </div>
                     </div>
                     <div className="form-container sign-in-container">
@@ -81,7 +142,13 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <p>{loginErrorMessage}</p>
-                            <button className={loading ? 'btn is-active' : 'btn'} onClick={() => { setLoading(!loading);chackUser(loginAndPassword,setLoading,setLoginErrorMessage,history) }}>Login</button>
+                            <button
+                                className={loading ? 'btn is-active' : 'btn'}
+                                onClick={() => {
+                                    setLoading(!loading);
+                                    chackUser()
+                                }}
+                            >Login</button>
                         </div>
                     </div>
                     <div className="overlay-container">
@@ -106,11 +173,11 @@ const Login = ({ history }) => {
                                 <button
                                     className="ghost"
                                     id="signIn"
-                                    onClick={() => { 
-                                        if(loading){
+                                    onClick={() => {
+                                        if (loading) {
                                             setLoading(false)
-                                            changeActive(!isActive) 
-                                        }else{
+                                            changeActive(!isActive)
+                                        } else {
                                             changeActive(!isActive)
                                         }
                                     }}
@@ -122,14 +189,14 @@ const Login = ({ history }) => {
                                 <button
                                     className="ghost"
                                     id="signUp"
-                                    onClick={() => { 
-                                        if(loading){
+                                    onClick={() => {
+                                        if (loading) {
                                             setLoading(false)
-                                            changeActive(!isActive) 
-                                        }else{
+                                            changeActive(!isActive)
+                                        } else {
                                             changeActive(!isActive)
                                         }
-                                     }}
+                                    }}
                                 >Register</button>
                             </div>
                         </div>
