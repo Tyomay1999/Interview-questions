@@ -15,20 +15,14 @@ const Login = ({ history }) => {
     const [registerErrorMessage, setRegisterErrorMessage] = useState('');
     const [loginErrorMessage, setLoginErrorMessage] = useState('');
     const [loading, setLoading] = useState(false)
-
-    let loginAndPassword = {
-        password: '',
-        conPassword: '',
-        email: ''
-    };
-
-
-     const createAcaunte = () => {
-        const { email, password } = loginAndPassword;
+    const [password, setPassword] = useState('')
+    const [conPassword, setConPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const createAcaunte = () => {
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(resp => {
                 let isSineIn = resp.operationType
-                if (isSineIn == 'signIn') {
+                if (isSineIn === 'signIn') {
                     setLoading(false)
                     changeActive(!isActive)
                 }
@@ -37,31 +31,29 @@ const Login = ({ history }) => {
                 setRegisterErrorMessage(`${errore.message}`)
             })
     }
-    
-    
-     const checkPassword = () => {
-        if (loginAndPassword.password !== '') {
-            if (loginAndPassword.password === loginAndPassword.conPassword) {
+
+
+    const checkPassword = () => {
+        if (password !== '') {
+            if (password === conPassword) {
                 setRegisterErrorMessage('')
                 createAcaunte()
             } else {
                 setLoading(false)
                 setRegisterErrorMessage('passwords did not match')
             }
-        }else{
+        } else {
             setLoading(false)
             setRegisterErrorMessage('Password is none')
         }
     }
-    
-     const chackUser = () => {
-        const { email, password } = loginAndPassword;
-    
+
+    const chackUser = () => {
         if (email && password) {
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(resp => {
                     let isSineIn = resp.operationType
-                    if (isSineIn == 'signIn') {
+                    if (isSineIn === 'signIn') {
                         history.push('/questions')
                     }
                 })
@@ -74,7 +66,7 @@ const Login = ({ history }) => {
             setLoginErrorMessage('Email or password is none')
         }
     }
-    
+
 
     return (
         <>
@@ -87,8 +79,9 @@ const Login = ({ history }) => {
                                 type="email"
                                 placeholder="Email"
                                 onChange={(e) => {
+                                    console.log("🚀 ~ file: login.js ~ line 85 ~ Login ~ e.target.value", e.target.value)
                                     if (Reg.emailReg.test(e.target.value.toLocaleLowerCase())) {
-                                        loginAndPassword.email = e.target.value.toLocaleLowerCase()
+                                        setEmail(e.target.value.toLocaleLowerCase())
                                     }
                                 }}
                             />
@@ -97,7 +90,7 @@ const Login = ({ history }) => {
                                 placeholder="Password"
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
-                                        loginAndPassword.password = e.target.value
+                                        setPassword(e.target.value)
                                     }
                                 }}
                             />
@@ -106,11 +99,11 @@ const Login = ({ history }) => {
                                 type='password'
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
-                                        loginAndPassword.conPassword = e.target.value
+                                        setConPassword(e.target.value)
                                     }
                                 }}
                             />
-                            <p>{registerErrorMessage}</p>
+                            <p className='errore'>{registerErrorMessage}</p>
                             <button
                                 className={loading ? 'btn is-active' : 'btn'}
                                 onClick={() => {
@@ -128,7 +121,7 @@ const Login = ({ history }) => {
                                 type='email'
                                 onChange={(e) => {
                                     if (Reg.emailReg.test(e.target.value.toLocaleLowerCase())) {
-                                        loginAndPassword.email = e.target.value.toLocaleLowerCase()
+                                        setEmail(e.target.value.toLocaleLowerCase())
                                     }
                                 }}
                             />
@@ -137,16 +130,20 @@ const Login = ({ history }) => {
                                 type='password'
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
-                                        loginAndPassword.password = e.target.value
+                                        setPassword(e.target.value)
                                     }
                                 }}
                             />
-                            <p>{loginErrorMessage}</p>
+                            <p className='errore'>{loginErrorMessage}</p>
                             <button
                                 className={loading ? 'btn is-active' : 'btn'}
                                 onClick={() => {
-                                    setLoading(!loading);
-                                    chackUser()
+                                    if (password && email) {
+                                        setLoading(!loading);
+                                        chackUser()
+                                    } else {
+                                        setLoginErrorMessage('Check your username or password or register')
+                                    }
                                 }}
                             >Login</button>
                         </div>

@@ -41,7 +41,9 @@
 h1 {
   font-weight: 300;
 }
-
+.errore{
+  font-size: 15px;
+}
 .form {
   background-color: #fff;
   display: flex;

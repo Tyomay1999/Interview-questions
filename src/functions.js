@@ -3,7 +3,7 @@ import 'firebase/database';
 import 'firebase/auth';
 
 
-export const getData = (setData,isLoading,loading,questionType) => {
+export const getData = (setData, isLoading, loading, questionType) => {
     firebase.database().ref(`${questionType}`).on("value", question => {
         let questionlist = [];
         question.forEach(item => {
@@ -38,11 +38,13 @@ const getResult = (trueAnswers,answers,getViewResult) => {
     getViewResult(trueAnswersOnQuestions)
 }
 
-export const nextQuestion = (data,setRadioValue,radioValue,answers,setAnswers,trueAnswers,setTrueAnswers,questionNum,setQuestionNum,result,setResult,getViewResult,totalQuestion) => {
+export const nextQuestion = (data,setRadioValue,radioValue,answers,setAnswers,trueAnswers,setTrueAnswers,questionNum,setQuestionNum,result,setResult,getViewResult,totalQuestion,question,setQuestion) => {
     answers.push(radioValue);
-    trueAnswers.push(data[0].questions[questionNum].trueAnsver)
+    trueAnswers.push(data[0].questions[questionNum].trueAnswer)
+    question.push(data[0].questions[questionNum].question)
     setAnswers(answers)
     setTrueAnswers(trueAnswers)
+    setQuestion(question)
     setRadioValue('')
     if (questionNum + 1 < totalQuestion) {
         setQuestionNum((questionNum + 1))
