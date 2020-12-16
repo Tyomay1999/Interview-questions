@@ -4,6 +4,8 @@ import 'firebase/auth';
 
 
 export const getData = (setData, isLoading, loading, questionType) => {
+    // console.log(firebase.auth().onAuthStateChanged(user => console.log(user.email)))
+    // console.log(firebase.auth().getData())
     firebase.database().ref(`${questionType}`).on("value", question => {
         let questionlist = [];
         question.forEach(item => {

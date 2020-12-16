@@ -1,5 +1,5 @@
-* {
-    box-sizing: border-box;
+  .question{
+    overflow: hidden;
   }
   .resultQuestion{
     width: 100%;
@@ -9,6 +9,9 @@
     align-items: flex-start;
     flex-wrap: wrap;
   }
+  .modal > h2{
+    color: white;
+  }
   .checkAnswers{
     width: 15px;
     height: 5px;
@@ -16,6 +19,7 @@
     border-radius: 35%;
   }
   .infoButons{
+    overflow: hidden;
     display: none;
     width: 100%;
     height: 100vh;
@@ -53,6 +57,7 @@
   }
   /*  */
   #modal_container {
+    overflow: hidden;
     position: fixed;
     display: table;
     height: 100%;

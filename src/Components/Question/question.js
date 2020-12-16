@@ -3,10 +3,10 @@ import { Redirect } from 'react-router-dom';
 import Loading from '../Loading/loading';
 import { getData, nextQuestion } from '../../functions'
 import { Link } from "react-router-dom";
-import questionModal from './question.module.css';
+import questionModule from './question.module.css';
 const Question = ({ location }) => {
     const { questionType } = location;
-    const [questionNum, setQuestionNum] = useState(0);
+    const [questionNum, setQuestionNum] = useState(15);
     const [viewResult, getViewResult] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [trueAnswers, setTrueAnswers] = useState([]);
@@ -31,15 +31,15 @@ const Question = ({ location }) => {
     }
 
     return (
-        <div className={questionModal.question}  >
-            <div className={result ? `${questionModal.result}` : `${questionModal.close}`}>
-                <div className={questionModal.infoButons} >
+        <div className={questionModule.question}>
+            <div className={result ? `${questionModule.result}` : `${questionModule.close}`}>
+                <div className={questionModule.infoButons} >
                     <div
-                        className={resultWindow ? `${questionModal.result}` : `${questionModal.close}`
+                        className={resultWindow ? `${questionModule.result}` : `${questionModule.close}`
                         }>
                         <h1>You typed {viewResult} out of {data[0].totalQuestion}</h1>
                         <Link
-                            className={questionModal.button}
+                            className={questionModule.button}
                             to={{
                                 pathname: "/Result",
                                 trueAnswers,
@@ -50,41 +50,37 @@ const Question = ({ location }) => {
                         >See your answers to questions</Link>
                     </div>
                     <button
-                        className={!resultWindow ? `${questionModal.button}` : `${questionModal.close}`}
+                        className={!resultWindow ? `${questionModule.button}` : `${questionModule.close}`}
                         onClick={() => {
                             setResultWindow(!resultWindow)
                         }}>Result</button>
-                    <Link className={questionModal.button} to='/questions'>Home</Link>
-                    <Link className={questionModal.button} to={{
-                        pathname: "/CreateNewQuestion",
-                        isLogin: 'true'
-                    }}>Create new question</Link>
+                    <Link className={questionModule.button} to='/questions'>Home</Link>
                 </div>
             </div>
-            <div id={questionModal.modal_container} className={result ? `${questionModal.one} ${questionModal.out}` : `${questionModal.one}`}>
-                <div className={questionModal.modal_background} key={questionNum + 1}>
-                    <div className={questionModal.modal} >
-                        <div className={questionModal.resultQuestion}>
+            <div id={questionModule.modal_container} className={result ? `${questionModule.one} ${questionModule.out}` : `${questionModule.one}`}>
+                <div className={questionModule.modal_background} key={questionNum + 1}>
+                    <div className={questionModule.modal} >
+                        <div className={questionModule.resultQuestion}>
                             {
                                 answers.map((item, index) => {
                                     if (item === trueAnswers[index]) {
                                         return (
-                                            <div key={index + 3} className={questionModal.checkAnswers} style={{ background: 'green' }}></div>
+                                            <div key={index + 3} className={questionModule.checkAnswers} style={{ background: 'green' }}></div>
                                         )
                                     } else {
                                         return (
-                                            <div key={index + 3} className={questionModal.checkAnswers} style={{ background: 'red' }}></div>
+                                            <div key={index + 3} className={questionModule.checkAnswers} style={{ background: 'red' }}></div>
                                         )
                                     }
 
                                 })
                             }
                         </div>
-                        <h2>Question {(questionNum + 1)}/{data[0].totalQuestion}</h2>
+                        <h2 className={questionModule.questionText} >Question {(questionNum + 1)}/{data[0].totalQuestion}</h2 >
                         <h1>
                             {data[0].questions[questionNum].question}
                         </h1>
-                        <div className={questionModal.questionCode} >
+                        <div className={questionModule.questionCode} >
                             {
                                 data[0].questions[questionNum].questionTyupe ? data[0].questions[questionNum].questionCode.map((line, index) => {
                                     return (
@@ -93,7 +89,7 @@ const Question = ({ location }) => {
                                 }) : ''
                             }
                         </div>
-                        <div className={questionModal.answers} >
+                        <div className={questionModule.answers} >
                             <form >
                                 {
                                     data[0].questions[questionNum].answers.map((rad, index) => {
@@ -117,7 +113,7 @@ const Question = ({ location }) => {
                             </form>
                         </div>
                         <button
-                            className={questionModal.confirmAnswer}
+                            className={questionModule.confirmAnswer}
                             disabled={radioValue ? '' : 'disabled'}
                             onClick={() => {
                                 nextQuestion(data, setRadioValue, radioValue, answers, setAnswers, trueAnswers, setTrueAnswers, questionNum, setQuestionNum, result, setResult, getViewResult, data[0].totalQuestion, question, setQuestion)

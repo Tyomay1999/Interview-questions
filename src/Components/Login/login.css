@@ -7,6 +7,7 @@
   align-items: center;
   margin-top: -50px;
   color: 3f3f3f;
+  overflow: hidden;
 }
 .login:after {
   position: absolute;
@@ -87,9 +88,11 @@ input {
   margin: 7px;
   width: 100%;
   outline-style: none;
+  color: white;
 }
 input::placeholder {
-  color: #131111;
+  color: white;
+
 }
 
 .container {
@@ -229,7 +232,7 @@ input::placeholder {
   transform: translateX(20%);
 }
 
-li {
+.bg-bubbles > li {
   position: absolute;
   list-style: none;
   display: block;
@@ -243,10 +246,10 @@ li {
   transition-timing-function: linear;
   z-index: 1;
 }
-.li1 {
+.li:nth-child(1) {
   left: 10%;
 }
-.li2 {
+.li:nth-child(2) {
   left: 20%;
   width: 80px;
   height: 80px;
@@ -255,12 +258,12 @@ li {
   -webkit-animation-duration: 17s;
   animation-duration: 17s;
 }
-.li3 {
+.li:nth-child(3) {
   left: 25%;
   -webkit-animation-delay: 4s;
   animation-delay: 4s;
 }
-.li4 {
+.li:nth-child(4) {
   left: 40%;
   width: 60px;
   height: 60px;
@@ -268,10 +271,10 @@ li {
   animation-duration: 22s;
   background-color: rgba(255, 255, 255, 0.25);
 }
-.li5 {
+.li:nth-child(5) {
   left: 70%;
 }
-.li6 {
+.li:nth-child(6) {
   left: 80%;
   width: 120px;
   height: 120px;
@@ -279,14 +282,14 @@ li {
   animation-delay: 3s;
   background-color: rgba(255, 255, 255, 0.2);
 }
-.li7 {
+.li:nth-child(7) {
   left: 32%;
   width: 160px;
   height: 160px;
   -webkit-animation-delay: 7s;
   animation-delay: 7s;
 }
-.li8 {
+.li:nth-child(8) {
   left: 55%;
   width: 20px;
   height: 20px;
@@ -295,7 +298,7 @@ li {
   -webkit-animation-duration: 40s;
   animation-duration: 40s;
 }
-.li9 {
+.li:nth-child(9) {
   left: 25%;
   width: 10px;
   height: 10px;
@@ -305,7 +308,7 @@ li {
   animation-duration: 40s;
   background-color: rgba(255, 255, 255, 0.3);
 }
-.li1 {
+.li:nth-child(10) {
   left: 90%;
   width: 160px;
   height: 160px;

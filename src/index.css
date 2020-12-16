@@ -7,9 +7,7 @@
     text-decoration: none;
 }
 body{
-    overflow: hidden;
     width: 100%;
     min-height: 110vh;
 	background:linear-gradient(190deg,#0c0549,#134899 ) no-repeat;
-
 }

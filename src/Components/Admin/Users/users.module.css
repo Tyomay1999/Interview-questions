@@ -1,0 +1,67 @@
+.Users{
+    width: 75%;
+    height: 100vh;
+    margin: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+}
+.h2{
+    font-size: 30px;
+    color: rgb(0, 0, 0);
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  table{
+    width:100%;
+    table-layout: fixed;
+    background:rgba(57, 103, 189, 0.493);
+  }
+  .tbl_header{
+    background-color: rgba(91, 163, 245, 0.568);
+  }
+  .tbl_content{
+    height: 600px;
+    overflow-x:auto;
+    margin-top: 0px;
+    border: 1.5px solid rgba(255, 255, 255, 0.836);
+  }
+  th{
+    padding: 20px 15px;
+    text-align: left;
+    font-weight: 300;
+    font-size: 20px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  td{
+    text-align: left;
+    font-size: 17px;
+    color: #fff;
+    border-bottom: solid 2px rgba(255,255,255,0.1);
+  }
+td:first-child,th:first-child{
+ text-align: center;
+}
+td:nth-child(3),th:nth-child(3){
+  text-align: center;
+}
+  .question{
+    text-align: left;
+    padding: 10px;
+    width: 250px;
+    height: 70px;
+    overflow-y: scroll;
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
+  } 
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.438); 
+  } 
+  ::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(187, 177, 177, 0.548); 
+  }

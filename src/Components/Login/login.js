@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './login.css';
 import './button.css'
 import firebase from 'firebase/app';
@@ -17,8 +17,35 @@ const Login = ({ history }) => {
     const [loading, setLoading] = useState(false)
     const [password, setPassword] = useState('')
     const [conPassword, setConPassword] = useState('')
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('');
+    const [admin, setAdmin] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [totalUsers, changeTotalUsers] = useState(null);
+    useEffect(() => {
+        firebase.database().ref('Users').on("value", question => {
+            let dataList = [];
+            question.forEach(item => {
+                dataList.push(item.val());
+            });
+            changeTotalUsers(dataList[0].totalUsers)
+        })
+        
+    },[isActive])
     const createAcaunte = () => {
+        if(totalUsers){
+            firebase.database().ref(`Users/user${totalUsers + 1}`).update({
+                isAdmin:false,
+                id:(totalUsers+1),
+                firstName,
+                lastName,
+                email,
+                password
+            })
+            firebase.database().ref(`Users/totalUsers`).update({
+                totalUsers: totalUsers + 1
+            })
+        }
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(resp => {
                 let isSineIn = resp.operationType
@@ -50,7 +77,10 @@ const Login = ({ history }) => {
 
     const chackUser = () => {
         if (email && password) {
-            firebase.auth().signInWithEmailAndPassword(email, password)
+            if(admin){
+                history.push('/Admin');
+            }else{
+                firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(resp => {
                     let isSineIn = resp.operationType
                     if (isSineIn === 'signIn') {
@@ -61,6 +91,7 @@ const Login = ({ history }) => {
                     setLoading(false)
                     setLoginErrorMessage(`${error.message}`)
                 })
+            }
         } else {
             setLoading(false)
             setLoginErrorMessage('Email or password is none')
@@ -76,10 +107,23 @@ const Login = ({ history }) => {
                         <div className='form'>
                             <h1>Register</h1>
                             <input
+                                type="text"
+                                placeholder="FirstName"
+                                onChange={(e) => {
+                                    setFirstName(e.target.value)
+                                }}
+                            />
+                            <input
+                                type="text"
+                                placeholder="LastName"
+                                onChange={(e) => {
+                                    setLastName(e.target.value)
+                                }}
+                            />
+                            <input
                                 type="email"
                                 placeholder="Email"
                                 onChange={(e) => {
-                                    console.log("🚀 ~ file: login.js ~ line 85 ~ Login ~ e.target.value", e.target.value)
                                     if (Reg.emailReg.test(e.target.value.toLocaleLowerCase())) {
                                         setEmail(e.target.value.toLocaleLowerCase())
                                     }
@@ -139,10 +183,11 @@ const Login = ({ history }) => {
                                 className={loading ? 'btn is-active' : 'btn'}
                                 onClick={() => {
                                     if (password && email) {
-                                        setLoading(!loading);
-                                        chackUser()
+                                        setAdmin(true);
+                                        // setLoading(!loading);
+                                        chackUser();
                                     } else {
-                                        setLoginErrorMessage('Check your username or password or register')
+                                        setLoginErrorMessage('Check your username or password or register');
                                     }
                                 }}
                             >Login</button>

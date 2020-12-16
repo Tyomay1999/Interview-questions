@@ -69,10 +69,6 @@ const CreateQuestion = ({ history }) => {
             setErrore('Please click to Question Type')
         }
     }
-
-    if (history.location.isLogin === undefined) {
-        return <Redirect to='/notFound' />
-    }
     return (
         <div className={createQuestionModule.modal}>
             <div className={createQuestionModule.panel}>
@@ -103,6 +99,7 @@ const CreateQuestion = ({ history }) => {
                 <p className={createQuestionModule.questionInput} > Question</p>
                 <textarea
                     type="textarea"
+                    placeholder='Question'
                     onChange={(e) => {
                         setQuestion(e.target.value)
                     }}
@@ -111,7 +108,7 @@ const CreateQuestion = ({ history }) => {
                 <p className={createQuestionModule.ansvers}>Answers</p>
                 <input
                     type="text"
-                    placeholder='Answer1'
+                    placeholder='Answer N1'
                     onChange={(e) => {
                         setAnswer1(e.target.value)
                     }}
@@ -119,7 +116,7 @@ const CreateQuestion = ({ history }) => {
                     } />
                 <input
                     type="text"
-                    placeholder='Answer2'
+                    placeholder='Answer N2'
                     onChange={(e) => {
                         setAnswer2(e.target.value)
 
@@ -128,7 +125,7 @@ const CreateQuestion = ({ history }) => {
                 />
                 <input
                     type="text"
-                    placeholder='Answer3'
+                    placeholder='Answer N3'
                     onChange={(e) => {
                         setAnswer3(e.target.value)
 
@@ -137,7 +134,7 @@ const CreateQuestion = ({ history }) => {
                 />
                 <input
                     type="text"
-                    placeholder='Answer4'
+                    placeholder='Answer N4'
                     onChange={(e) => {
                         setAnswer4(e.target.value)
 
@@ -148,11 +145,12 @@ const CreateQuestion = ({ history }) => {
                 <p>True Answer</p>
                 <input
                     type="text"
-                    placeholder='trueAnswer'
+                    placeholder='True answer'
                     onChange={(e) => {
                         setTrueAnswer(e.target.value)
 
                     }}
+                    className={createQuestionModule.questionAnswer}
                 />
 
                 <div className={createQuestionModule.buttons}>
@@ -163,12 +161,6 @@ const CreateQuestion = ({ history }) => {
                         }}
                         className={createQuestionModule.button}
                     >Create</button>
-                    <button
-                        onClick={() => {
-                            history.push('/questions')
-                        }}
-                        className={createQuestionModule.button}
-                    >Home</button>
                 </div>
             </div>
         </div>

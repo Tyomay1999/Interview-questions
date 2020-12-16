@@ -13,11 +13,11 @@ const QuestionType = () => {
                 <div className={questionType.courses_container}>
                     <div className={questionType.course}>
                         <div className={questionType.course_preview}>
-                            <h6>Question</h6>
-                            <h2>1</h2>
+                            <h6 className={questionType.textQuestionType}>Question</h6>
+                            <h2 className={questionType.textQuestionType}>1</h2>
                         </div>
                         <div className={questionType.course_info}>
-                            <h2>HTML</h2>
+                            <h2 className={questionType.textQuestionTypes}>HTML</h2>
                             <Link
                                 className={questionType.btns}
                                 to={{
@@ -30,11 +30,11 @@ const QuestionType = () => {
                 <div className={questionType.courses_container}>
                     <div className={questionType.course}>
                         <div className={questionType.course_preview}>
-                            <h6>Question</h6>
-                            <h2>2</h2>
+                            <h6 className={questionType.textQuestionType}>Question</h6>
+                            <h2 className={questionType.textQuestionType}>2</h2>
                         </div>
                         <div className={questionType.course_info}>
-                            <h2>CSS</h2>
+                            <h2 className={questionType.textQuestionTypes}>CSS</h2>
                             <Link
                                 className={questionType.btns}
                                 to={{
@@ -46,11 +46,11 @@ const QuestionType = () => {
                 </div>
                 <div className={questionType.course}>
                     <div className={questionType.course_preview}>
-                        <h6>Question</h6>
-                        <h2>3</h2>
+                        <h6 className={questionType.textQuestionType}>Question</h6>
+                        <h2 className={questionType.textQuestionType}>3</h2>
                     </div>
                     <div className={questionType.course_info}>
-                        <h2>JavaScript Advanced</h2>
+                        <h2 className={questionType.textQuestionTypes}>JavaScript Advanced</h2>
                         <Link
                             className={questionType.btns}
                             to={{
@@ -62,11 +62,11 @@ const QuestionType = () => {
                 <div className={questionType.courses_container}>
                     <div className={questionType.course}>
                         <div className={questionType.course_preview}>
-                            <h6>Question</h6>
-                            <h2>4</h2>
+                            <h6 className={questionType.textQuestionType}>Question</h6>
+                            <h2 className={questionType.textQuestionType}>4</h2>
                         </div>
                         <div className={questionType.course_info}>
-                            <h2>React JS</h2>
+                            <h2 className={questionType.textQuestionTypes}>React JS</h2>
                             <Link
                                 className={questionType.btns}
                                 to={{
