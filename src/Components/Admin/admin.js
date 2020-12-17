@@ -1,20 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import adminModule from './admin.module.css'
 import Questions from './Questions/questions';
 import Users from './Users/users';
 import CreateQuestion from './CreateQuestion/createQuestion'
 import CreateUser from './CreateUser/createUser';
 const Admin = ({ history }) => {
-  const [users, setUsers] = useState(false);
-  const [newUsers, setNewUsers] = useState(true);
+  const [users, setUsers] = useState(true);
+  const [newUsers, setNewUsers] = useState(false);
   const [questions, setQuestions] = useState(false);
   const [newQuestion, setNewQuestion] = useState(false);
-
-  useEffect(() => {
-    return () => {
-
-    }
-  }, []);
+  const [user, setUser] = useState(false);
 
   return (
     <div className={adminModule.admin}>
@@ -27,15 +22,6 @@ const Admin = ({ history }) => {
           <nav>
             <b>Questions<span>Admin</span></b>
             <ul className={adminModule.ul}>
-            <li 
-              className={newUsers ? adminModule.active : ''}
-              onClick={ () =>{ 
-                setUsers(false);
-                setNewUsers(true);
-                setQuestions(false);
-                setNewQuestion(false);
-              }}>
-                  <b>Create user</b></li>
               <li 
               className={users ? adminModule.active : ''}
               onClick={ () =>{ 
@@ -45,6 +31,16 @@ const Admin = ({ history }) => {
                 setNewQuestion(false);
               }}>
                   <b>Users</b></li>
+            <li 
+              className={newUsers ? adminModule.active : ''}
+              onClick={ () =>{ 
+                setUsers(false);
+                setNewUsers(true);
+                setQuestions(false);
+                setNewQuestion(false);
+                setUser(false)
+              }}>
+                  <b>Edit user</b></li>
               <li 
               className={questions ? adminModule.active : ''}
               onClick={() =>{ 
@@ -61,7 +57,7 @@ const Admin = ({ history }) => {
                 setQuestions(false);
                 setNewUsers(false);
               }}>
-                <b>Create question</b></li>
+                <b>Edit question</b></li>
               <li
                 onClick={() => {
                    history.push('/') 
@@ -72,8 +68,18 @@ const Admin = ({ history }) => {
         </div>
 
         <div className={adminModule.main_content}>
-        {newUsers && <CreateUser/>}
-          {users && <Users/>}
+        {newUsers &&
+         <CreateUser
+            setNewUsers={setNewUsers}
+            users={user}
+            setUsers={setUsers}
+            setUser={setUser}
+         />}
+          {users && <Users
+            setUsers={setUsers}
+            setUser={setUser}
+            setNewUsers={setNewUsers}
+          />}
           {questions && <Questions/>}
           {newQuestion && <CreateQuestion/>}
           </div>

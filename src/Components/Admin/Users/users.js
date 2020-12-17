@@ -3,9 +3,9 @@ import usersModule from './users.module.css';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
-const Users = (props) => {
-    const [users, setUsers] = useState([]);
-    console.log("🚀 ~ file: users.js ~ line 8 ~ Users ~ user", users)
+const Users = ({setUser,setNewUsers,setUsers}) => {
+    const [users, setUsersw] = useState([]);
+    // console.log("🚀 ~ file: users.js ~ line 8 ~ Users ~ user", users)
     useEffect(() => {
         firebase.database().ref("Users").on("value", user => {
             let userList = [];
@@ -13,7 +13,7 @@ const Users = (props) => {
             // console.log("🚀 ~ file: users.js ~ line 13 ~ firebase.database ~ item", item)
                 userList.push(item.val());
             });
-            setUsers(userList)
+            setUsersw(userList)
         })
         // firebase.database().ref("Users/0").push({
         //     firstName: 'Lana',
@@ -54,7 +54,7 @@ const Users = (props) => {
                             users && users.map((user, index) => {
                                 if(typeof(user.id) === "number"){
                                     return (
-                                        <tr key={index + 1}>
+                                        <tr key={index + 1} onDoubleClick={() => {setUser({user});setNewUsers(true);setUsers(false)}}>
                                             <td>{user.id}</td>
                                             <td>{user.isAdmin ? "Yes" : "No"}</td>
                                             <td>
