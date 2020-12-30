@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './login.css';
 import './button.css'
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
-// firebase.database().ref('JavaScript').push()
+import { Reg, createAcaunte, chackUser, firebaseDatabase } from '../../functions'
 
 const Login = ({ history }) => {
-    let Reg = {
-        emailReg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        passwordReg: /^[a-z0-9_$-]{7,30}$/i
-    }
     const [isActive, changeActive] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState('');
     const [loginErrorMessage, setLoginErrorMessage] = useState('');
@@ -18,53 +11,35 @@ const Login = ({ history }) => {
     const [password, setPassword] = useState('')
     const [conPassword, setConPassword] = useState('')
     const [email, setEmail] = useState('');
-    const [admin, setAdmin] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
     useEffect(() => {
-        firebase.database().ref('Users').on("value", question => {
+        firebaseDatabase().ref('Users').on("value", question => {
             let dataList = [];
             question.forEach(item => {
                 dataList.push(item.val());
             });
             changeTotalUsers(dataList[0].totalUsers)
         })
-        
-    },[isActive])
-    const createAcaunte = () => {
-        if(totalUsers){
-            firebase.database().ref(`Users/user${totalUsers + 1}`).update({
-                isAdmin:false,
-                id:(totalUsers+1),
-                firstName,
-                lastName,
-                email,
-                password
-            })
-            firebase.database().ref(`Users/totalUsers`).update({
-                totalUsers: totalUsers + 1
-            })
-        }
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(resp => {
-                let isSineIn = resp.operationType
-                if (isSineIn === 'signIn') {
-                    setLoading(false)
-                    changeActive(!isActive)
-                }
-            })
-            .catch(errore => {
-                setRegisterErrorMessage(`${errore.message}`)
-            })
-    }
 
+    }, [isActive])
 
     const checkPassword = () => {
         if (password !== '') {
             if (password === conPassword) {
                 setRegisterErrorMessage('')
-                createAcaunte()
+                createAcaunte({
+                    totalUsers,
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    setLoading,
+                    changeActive,
+                    isActive,
+                    setRegisterErrorMessage
+                })
             } else {
                 setLoading(false)
                 setRegisterErrorMessage('passwords did not match')
@@ -74,30 +49,6 @@ const Login = ({ history }) => {
             setRegisterErrorMessage('Password is none')
         }
     }
-
-    const chackUser = () => {
-        if (email && password) {
-            if(admin){
-                history.push('/Admin');
-            }else{
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(resp => {
-                    let isSineIn = resp.operationType
-                    if (isSineIn === 'signIn') {
-                        history.push('/questions')
-                    }
-                })
-                .catch(error => {
-                    setLoading(false)
-                    setLoginErrorMessage(`${error.message}`)
-                })
-            }
-        } else {
-            setLoading(false)
-            setLoginErrorMessage('Email or password is none')
-        }
-    }
-
 
     return (
         <>
@@ -114,6 +65,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
+                                disabled={firstName ? false : true}
                                 type="text"
                                 placeholder="LastName"
                                 onChange={(e) => {
@@ -121,6 +73,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
+                                disabled={lastName ? false : true}
                                 type="email"
                                 placeholder="Email"
                                 onChange={(e) => {
@@ -130,6 +83,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
+                                disabled={email ? false : true}
                                 type='password'
                                 placeholder="Password"
                                 onChange={(e) => {
@@ -139,6 +93,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
+                                disabled={password ? false : true}
                                 placeholder="Confirm Password"
                                 type='password'
                                 onChange={(e) => {
@@ -149,6 +104,7 @@ const Login = ({ history }) => {
                             />
                             <p className='errore'>{registerErrorMessage}</p>
                             <button
+                                disabled={conPassword ? false : true}
                                 className={loading ? 'btn is-active' : 'btn'}
                                 onClick={() => {
                                     setLoading(!loading);
@@ -170,6 +126,7 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
+                                disabled={email ? false : true}
                                 placeholder="Password"
                                 type='password'
                                 onChange={(e) => {
@@ -180,12 +137,18 @@ const Login = ({ history }) => {
                             />
                             <p className='errore'>{loginErrorMessage}</p>
                             <button
+                                disabled={(email && password) ? false : true}
                                 className={loading ? 'btn is-active' : 'btn'}
                                 onClick={() => {
                                     if (password && email) {
-                                        setAdmin(true);
-                                        // setLoading(!loading);
-                                        chackUser();
+                                        setLoading(!loading);
+                                        chackUser({
+                                            email,
+                                            password,
+                                            setLoading,
+                                            setLoginErrorMessage,
+                                            history
+                                        });
                                     } else {
                                         setLoginErrorMessage('Check your username or password or register');
                                     }

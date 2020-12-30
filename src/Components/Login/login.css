@@ -7,8 +7,8 @@
   align-items: center;
   margin-top: -50px;
   color: 3f3f3f;
-  overflow: hidden;
 }
+
 .login:after {
   position: absolute;
   content: "";
@@ -44,6 +44,7 @@ h1 {
 }
 .errore{
   font-size: 15px;
+  color: black;
 }
 .form {
   background-color: #fff;
@@ -55,7 +56,9 @@ h1 {
   height: 100%;
   text-align: center;
 }
-
+.form > h1 {
+  color: black;
+}
 button {
   margin: 7px;
   border-radius: 6px;
@@ -336,5 +339,11 @@ input::placeholder {
   100% {
     -webkit-transform: translateY(-700px) rotate(600deg);
     transform: translateY(-700px) rotate(600deg);
+  }
+}
+@media only screen and (max-width: 720px) {
+  .login {
+    margin: auto;
+    width: 90%;
   }
 }

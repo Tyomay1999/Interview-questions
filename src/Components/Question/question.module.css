@@ -1,5 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
   .question{
     overflow: hidden;
+  }
+  .buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .timer{
+    font-family: 'Luckiest Guy', cursive;
+    width: 100%;
+    font-size: 35px;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+  .time {
+    color: whitesmoke;
   }
   .resultQuestion{
     width: 100%;
@@ -67,6 +84,8 @@
     transform: scale(0);
     z-index: 1;
   }
+
+  
   #modal_container.one {
     transform: scaleY(0.01) scaleX(0);
     animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -119,6 +138,14 @@
     color: whitesmoke;
     width: 70%;
     border-radius: 20px;
+  }
+  @media only screen and (max-width: 720px) {
+    .modal{
+      width: 90%;
+      border-radius: 15px;
+    }
+    /* .timer{
+    } */
   }
   .button {
     margin: 7px;

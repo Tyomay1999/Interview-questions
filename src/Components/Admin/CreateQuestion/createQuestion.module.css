@@ -6,9 +6,20 @@
     align-items: center;
     flex-direction: column;
 }
+.questionTypeInput{
+  background-color: whitesmoke;
+  color: #17181c;
+  width: 90%;
+  display: block;
+}
+.inputQuestionType{
+  display: none;
+}
+button:disabled{
+  background-color: #ffffff79;
+}
 .panel{
     width: 70%;
-    height: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,6 +30,11 @@
 }
 .panel > input::placeholder {
   color: black;
+}
+.textarea{
+  border-radius: 15px;
+  min-height: 25px;
+  padding: 15px;
 }
 .questionAnswer, .textarea, .trueAnswers{
   color: #17181c;
@@ -54,6 +70,7 @@ p{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
   }
   .forms input {
     position: absolute;
@@ -97,4 +114,9 @@ p{
     transition: 0.25s ease;
     box-shadow: inset 0 0 0 5px #1b1bb6;
   }
-  
+  @media only screen and (max-width: 720px) {
+    .panel{
+      width: 95%;
+      margin: auto;
+    }
+  }

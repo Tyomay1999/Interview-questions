@@ -1,110 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import createUserModule from './createUser.module.css';
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
+import { UserCreate, editeUser, deleteUser, Reg, firebaseDatabase } from '../../../functions';
+
 const CreateUser = ({ setNewUsers, users, setUsers }) => {
+    const { user } = users;
     const [loading, setLoading] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [isAdmin, setIsAdmin] = useState(user ? user.isAdmin : false);
+    const [firstName, setFirstName] = useState(user ? user.firstName : '');
+    const [lastName, setLastName] = useState(user ? user.lastName : '');
+    const [email, setEmail] = useState(user ? user.email : '');
+    const [password, setPassword] = useState(user ? user.password : '');
     const [Errore, setErrore] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
     const [userDeleter, setUserDeleter] = useState([]);
+
+
     useEffect(() => {
-        if (users.user) {
-            setFirstName(users.user.firstName);
-            setLastName(users.user.lastName);
-            setEmail(users.user.email);
-            setPassword(users.password);
-            setIsAdmin(users.user.isAdmin)
-        }
-        firebase.database().ref('Users').on("value", question => {
+        firebaseDatabase().ref('Users').on("value", question => {
             let dataList = [];
             question.forEach(item => {
                 dataList.push(item.val());
             });
             setUserDeleter(dataList)
-            changeTotalUsers(dataList[0].totalUsers)
-        })
-    }, [loading])
-    const CreateUser = () => {
-        if (email && password && lastName && firstName) {
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-            firebase.database().ref(`Users/${totalUsers + 1}`).update({
-                isAdmin,
-                id: (totalUsers + 1),
-                firstName,
-                lastName,
-                email,
-                password
-            })
-            firebase.database().ref(`Users/0`).update({
-                totalUsers: totalUsers + 1
-            })
-            setLastName('');
-            setFirstName('');
-            setEmail('');
-            setPassword('');
-            setErrore('');
-            setLoading(!loading);
-            setUsers(true);
-            setNewUsers(false);
-        } else {
-            setErrore('Please write all lines')
-        }
-    }
-    const editeUser = () => {
-        firebase.database().ref(`Users/${users.user.id}`).update({
-            isAdmin,
-            id: users.user.id,
-            firstName,
-            lastName,
-            email
-        })
-        setLastName('');
-        setFirstName('');
-        setEmail('');
-        setPassword('');
-        setIsAdmin(false)
-        setLoading(!loading);
-        setUsers(true)
-        setNewUsers(false)
-    }
-    const deleteUser = () => {
-        userDeleter[0].totalUsers -= 1;
-        const falseArray = [];
-        userDeleter.forEach((item, index) => {
-            if (item.email === email) {
-                falseArray.push(userDeleter[0])
-                for (let i = 1; i < index; i++) {
-                    userDeleter[i].id = i;
-                    falseArray.push(userDeleter[i])
-                }
-                for (let i = index; i < userDeleter.length; i++) {
-                    if (userDeleter[i + 1]) {
-                        userDeleter[i + 1].id = i;
-                        userDeleter[i] = userDeleter[i + 1];
-                        falseArray.push(userDeleter[i]);
-                    }
-                }
-            } else {
-                setErrore('dont have a this user')
+            if (dataList[0]) {
+                changeTotalUsers(dataList[0].totalUsers)
             }
         })
-        firebase.database().ref(`Users/${(userDeleter[0].totalUsers + 1)}`).remove();
-        firebase.database().ref('Users').update(falseArray);
-        setLastName('');
-        setFirstName('');
-        setEmail('');
-        setPassword('');
-        setErrore('');
-        setLoading(!loading);
-        setUsers(true);
-        setNewUsers(false);
-    }
+    }, [loading])
+
     return (
         <section className={createUserModule.modal}>
             <div className={createUserModule.panel}>
@@ -141,46 +64,95 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                     value={email}
                     placeholder='Email'
                     onChange={(e) => {
-                        setEmail(e.target.value)
-
+                        setEmail(e.target.value.toLocaleLowerCase())
                     }}
                     className={createUserModule.questionAnswer}
                 />
                 <input
                     disabled={email ? false : true}
-                    type="text"
+                    type="Password"
                     value={password}
                     placeholder='Password'
                     onChange={(e) => {
                         setPassword(e.target.value)
-
                     }}
                     className={createUserModule.questionAnswer}
                 />
                 <div className={createUserModule.buttons}>
                     <button
-                        disabled={email ? false : true}
+                        disabled={user ? true : (password ? false : true)}
                         onClick={() => {
-                            setLoading(!loading)
-                            setErrore('');
-                            CreateUser();
+                            if (Reg.emailReg.test(email) && Reg.passwordReg.test(password)) {
+                                setLoading(!loading)
+                                setErrore('');
+                                UserCreate({
+                                    email,
+                                    password,
+                                    lastName,
+                                    firstName,
+                                    totalUsers,
+                                    isAdmin,
+                                    setLastName,
+                                    setFirstName,
+                                    setEmail,
+                                    setPassword,
+                                    setErrore,
+                                    setLoading,
+                                    loading,
+                                    setUsers,
+                                    setNewUsers
+                                });
+                            } else {
+                                setErrore('Please check password or email addres')
+                            }
                         }}
                         className={createUserModule.button}
                     >Create</button>
                     <button
-                        disabled={email ? false : true}
+                        disabled={user ? false : true}
 
                         onClick={() => {
-                            setErrore('');
-                            editeUser();
+                            if (Reg.emailReg.test(email) && Reg.passwordReg.test(password)) {
+                                setErrore('');
+                                editeUser({
+                                    users,
+                                    isAdmin,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    setLastName,
+                                    setFirstName,
+                                    setEmail,
+                                    setPassword,
+                                    setIsAdmin,
+                                    setLoading,
+                                    loading,
+                                    setUsers,
+                                    setNewUsers
+                                });
+                            } else {
+                                setErrore('Please check password or email addres')
+                            }
                         }}
                         className={createUserModule.button}
                     >Edite</button>
                     <button
-                        disabled={email ? false : true}
+                        disabled={user ? false : true}
                         onClick={() => {
                             setErrore('');
-                            deleteUser()
+                            deleteUser({
+                                userDeleter,
+                                setErrore,
+                                setLastName,
+                                setFirstName,
+                                setEmail,
+                                setPassword,
+                                setLoading,
+                                loading,
+                                setUsers,
+                                setNewUsers,
+                                email
+                            })
                         }}
                         className={createUserModule.button}
                     >Delete</button>

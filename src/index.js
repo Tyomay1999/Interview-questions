@@ -8,20 +8,19 @@ import 'firebase/auth';
 
 
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAKds3v3_GykqSzDgC6ilYaCKRJcBoP6Ps",
-  authDomain: "interview-question-ea2ff.firebaseapp.com",
-  databaseURL: "https://interview-question-ea2ff.firebaseio.com",
-  projectId: "interview-question-ea2ff",
-  storageBucket: "interview-question-ea2ff.appspot.com",
-  messagingSenderId: "539269061608",
-  appId: "1:539269061608:web:5ce989e33481efcc5ee25d"
-}
-firebase.initializeApp(firebaseConfig)
+let firebaseConfig = {
+  apiKey: "AIzaSyCP1YifmRYAjn1eEO4uo18XdGnEtpzzq6M",
+  authDomain: "it-interview-questions-ce3b5.firebaseapp.com",
+  databaseURL: "https://it-interview-questions-ce3b5-default-rtdb.firebaseio.com",
+  projectId: "it-interview-questions-ce3b5",
+  storageBucket: "it-interview-questions-ce3b5.appspot.com",
+  messagingSenderId: "309097191903",
+  appId: "1:309097191903:web:918213bfb6e181395ecc6a"
+};
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
-
 

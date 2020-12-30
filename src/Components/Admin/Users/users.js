@@ -1,34 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import usersModule from './users.module.css';
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
-const Users = ({setUser,setNewUsers,setUsers}) => {
-    const [users, setUsersw] = useState([]);
-    // console.log("🚀 ~ file: users.js ~ line 8 ~ Users ~ user", users)
+import { firebaseDatabase } from '../../../functions';
+const Users = ({ setUser, setNewUsers, setUsers }) => {
+    const [users, getUsers] = useState([]);
     useEffect(() => {
-        firebase.database().ref("Users").on("value", user => {
+        firebaseDatabase().ref("Users").on("value", user => {
             let userList = [];
             user.forEach(item => {
-            // console.log("🚀 ~ file: users.js ~ line 13 ~ firebase.database ~ item", item)
                 userList.push(item.val());
             });
-            setUsersw(userList)
+            getUsers(userList)
         })
-        // firebase.database().ref("Users/0").push({
-        //     firstName: 'Lana',
-        //     lastName: "ddaa",
-        //     email: 'lana@mail.ru',
-        //     password: 'Artyom2012'
-        // })
-        // firebase.database().ref("Users/user1").update({
-        //     firstName: 'Lana',
-        //     lastName: "sss",
-        //     email: 'lana@mail.ru',
-        //     password: 'Artyom2012',
-        //     isAdmin: false
-        // })
-
     }, []);
 
     return (
@@ -52,9 +34,13 @@ const Users = ({setUser,setNewUsers,setUsers}) => {
                     <tbody>
                         {
                             users && users.map((user, index) => {
-                                if(typeof(user.id) === "number"){
+                                if (typeof (user.id) === "number") {
                                     return (
-                                        <tr key={index + 1} onDoubleClick={() => {setUser({user});setNewUsers(true);setUsers(false)}}>
+                                        <tr key={index + 1} onDoubleClick={() => {
+                                            setUser({ user });
+                                            setNewUsers(true);
+                                            setUsers(false);
+                                        }}>
                                             <td>{user.id}</td>
                                             <td>{user.isAdmin ? "Yes" : "No"}</td>
                                             <td>

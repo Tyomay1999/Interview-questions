@@ -1,72 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import questionsModule from './questions.module.css';
-import firebase from 'firebase/app'; 
-import 'firebase/database'; 
-import 'firebase/auth';
+import { firebaseDatabase } from '../../../functions';
+
 const get = (quesType,setQuestionData) => {
-    firebase.database().ref(quesType).on("value", question => {
+    firebaseDatabase().ref(`QuestionType/${quesType.toUpperCase()}/${quesType}`).on("value", question => {
         let questionlist = [];
         question.forEach(item => {
             questionlist.push(item.val());
         });
-        if(questionlist){
-            for(let i = 1; i < questionlist.length; i++ ){
-                let num = 0;
-                questionlist[0].questions.forEach(item => {
-                    if(item.question === questionlist[i].question){
-                        num += 1
-                    }
-                })
-                if(!num){
-                    questionlist[0].questions.push(questionlist[i])
-                }
-            }
-            questionlist[0].totalQuestion = questionlist[0].questions.length
-        }
+        questionlist.forEach((item,index) => {
+            item.id = index
+        })
         setQuestionData(questionlist);
     })
 }
 
-const Questions = (props) => {
+const Questions = ({setQuestion,setQuestions,setNewQuestion}) => {
     const [quesType, setQuesType] = useState(`Html`);
     const [questionData, setQuestionData] = useState('');
+    const [allQuestionType, setAllQuestionType] = useState([]);
+
     useEffect(() => {
+        firebaseDatabase().ref('QuestionType').on("value", question => {
+            let questionsList = [];
+            question.forEach(item => {
+                questionsList.push(item.val());
+            });
+            setAllQuestionType(questionsList)
+            // setUserDeleter(questionsList)
+        })
         get(quesType,setQuestionData)
     },[quesType])
         // firebase.database().ref('Html/').remove()
-    console.log("🚀 ~ file: questions.js ~ line 10 ~ Questions ~ questionData", questionData)
+    // console.log("🚀 ~ file: questions.js ~ line 10 ~ Questions ~ questionData", questionData)
     
     return (
         <section className={questionsModule.Questions}>
             <div className={questionsModule.questionTypeButtons}>
                 <h1 className={questionsModule.h1}>{quesType}</h1>
-                <button
-                    className={questionsModule.questionTypeButton}
-                    onClick={() => {setQuesType('Html')}}
-                >Html</button>
-                <button
-                    className={questionsModule.questionTypeButton}
-                    onClick={() => {setQuesType('Css')}}
-                >Css</button>
-                <button
-                    className={questionsModule.questionTypeButton}
-                    onClick={() => {setQuesType('JavaScript')}}
-                >JavaScript</button>
-                <button
-                    className={questionsModule.questionTypeButton}
-                    onClick={() => {setQuesType('ReactJS')}}
-                >ReactJS</button>
+                {allQuestionType.map((item,index) => {
+                    return (
+                        <button
+                            key={index}
+                            className={questionsModule.questionTypeButton}
+                            onClick={() => { setQuesType(item.name) }}
+                        >{item.name}</button>
+                    )
+                })}
             </div>
             <div className={questionsModule.questionList}>
-                {questionData ? questionData[0].questions.map((item,index) => {
-                                const {question,answers,trueAnswer} = item
+                {questionData ? questionData.map((item,index) => {
+                                const {id,question,answers,trueAnswer,questionCode,questionTyupe} = item
                     return (
-                        <div className={questionsModule.questionItem} key={index}>
+                        <div className={questionsModule.questionItem} key={index} onDoubleClick={() => {
+                            setQuestion({
+                                quesType,
+                                question,
+                                answers,
+                                questionTyupe,
+                                questionCode,
+                                trueAnswer,
+                                id
+                            });
+                            setQuestions(false);
+                            setNewQuestion(true);
+                        }}>
                             <div className={questionsModule.itemQuestions}>
                                 <h1 className={questionsModule.itemQuestion}>{question}</h1>
                             </div>
                             <div className={questionsModule.questionCode}>
-                            {questionData[0].questions[index].questionTyupe ? questionData[0].questions[index].questionCode.map((line, i) => {
+                            {questionData[index].questionTyupe ? questionData[index].questionCode.map((line, i) => {
                                  return (
                                     <p className={questionsModule.questionCod} key={i}>{line}</p>
                                 )
