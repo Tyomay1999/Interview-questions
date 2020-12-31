@@ -67,3 +67,11 @@
     -webkit-transition: opacity 250ms 1.5s ease-in;
     transition: opacity 250ms 1.5s ease-in;
   }
+@media only screen and (max-width: 450px) {
+  .btn {
+    min-width: 150px;
+    padding: 7px 0;
+    font-size: 15px;
+    font-weight: 350;
+  }
+}

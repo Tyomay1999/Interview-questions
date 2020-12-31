@@ -14,6 +14,7 @@ const Login = ({ history }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
+    
     useEffect(() => {
         firebaseDatabase().ref('Users').on("value", question => {
             let dataList = [];

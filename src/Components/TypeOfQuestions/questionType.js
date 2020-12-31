@@ -27,7 +27,7 @@ const QuestionType = () => {
                         <div className={questionType.course}>
                             <div className={questionType.course_preview}>
                                 <h6 className={questionType.textQuestionType}>Question</h6>
-                                <h2 className={questionType.textQuestionType}>{index + 1}</h2>
+                                <h2 className={questionType.textQuestionTypeNum}>{index + 1}</h2>
                             </div>
                             <div className={questionType.course_info}>
                                 <h2 className={questionType.textQuestionTypes}>{item.name}</h2>

@@ -122,7 +122,7 @@ const Question = ({ history, location }) => {
                                 }
                             </div>
                             <div className={questionModule.timer}>
-                                <p>
+                                <h6>
                                     <span className={questionModule.tiem}>
                                         {((timerMinute - 9) > 0) ? timerMinute : `0${timerMinute}`}
                                     </span>
@@ -130,7 +130,7 @@ const Question = ({ history, location }) => {
                                 <span className={questionModule.tiem}>
                                         {((timerSecond - 9) > 0) ? timerSecond : `0${timerSecond}`}
                                     </span>
-                                </p>
+                                </h6>
                             </div>
                             <h1>
                                 {data[questionNum].question}

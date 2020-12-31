@@ -341,9 +341,50 @@ input::placeholder {
     transform: translateY(-700px) rotate(600deg);
   }
 }
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 450px) {
   .login {
+    padding: 8px;
     margin: auto;
-    width: 90%;
+    width: 100%;
+    font-weight: 200;
   }
+  h1 {
+    font-weight: 200;
+  }
+  .form {
+    padding: 0 10px;
+  }
+  
+  button {
+    padding: 7px 10px;
+    font-weight: 100;
+  }
+  .container {
+    width: 640px;
+    min-height: 350px;
+  }
+
+  input {
+    padding: 10px;
+    font-size: 12px;
+    margin: 5px;
+  }
+  .errore{
+    width: 90%;
+    font-size: 10px;
+  }
+  /* login */
+  .overlay-left > h1,.overlay-right > h1{
+    font-size: 20px;
+  }
+  .overlay-left > p,.overlay-right > p{
+    width: 120px;
+    font-size: 15px;
+  }
+  #signIn,#signUp{
+    width: 100px;
+    padding: 3px;
+    font-size: 12px;
+  }
+  
 }

@@ -72,16 +72,40 @@
 	background-color: #223983;
 	color: blanchedalmond;
 }
-@media only screen and (max-width: 720px) {
+@media only screen and (max-width: 450px) {
   .questionType {
     margin: auto;
-    width: 90%;
+    width: 95%;
   }
   .course{
-    width: 600px;
+    width: 90%;
+    height: 75px;
+  }
+  .textQuestionType{
+    font-size: 8px;
+    font-weight: 100;
+    /* background-color: black; */
+  }
+  .course_preview {
+    padding: 5px;
+  }
+  .textQuestionTypeNum{
+    font-size: 20px;
+    font-weight: 100;
   }
   .course h6{
     opacity: 0.7;
     letter-spacing: 2px;
+  }
+  .btns {
+    font-size: 10px;
+    padding: 8px;
+    bottom: 10px;
+    right: 25px;
+  }
+  .course_info {
+    padding: 10px;
+    font-size: 12px;
+    font-weight: 100;
   }
 }
