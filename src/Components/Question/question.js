@@ -4,6 +4,7 @@ import Loading from '../Loading/loading';
 import { CompleteAndExit, getData, nextQuestion } from '../../functions'
 import { Link } from "react-router-dom";
 import questionModule from './question.module.css';
+import Header from '../Header/header';
 
 
 const Question = ({ history, location }) => {
@@ -62,6 +63,7 @@ const Question = ({ history, location }) => {
 
     return (
         <>
+        <Header/>
             <div className={questionModule.question}>
                 <div className={result ? `${questionModule.result}` : `${questionModule.close}`}>
                     <div className={questionModule.infoButons} >
@@ -176,7 +178,9 @@ const Question = ({ history, location }) => {
                                             result,
                                             trueAnswers,
                                             answers,
-                                            getViewResult
+                                            getViewResult,
+                                            questionType,
+                                            question
                                         });
                                     }}
                                 >
@@ -201,7 +205,8 @@ const Question = ({ history, location }) => {
                                             getViewResult,
                                             totalQuestion: data[(data.length - 1)].totalQuestion,
                                             question,
-                                            setQuestion
+                                            setQuestion,
+                                            questionType
                                         });
                                     }}
                                 >

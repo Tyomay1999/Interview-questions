@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './login.css';
-import './button.css'
-import { Reg, createAcaunte, chackUser, firebaseDatabase } from '../../functions'
+import './button.css';
+import { Reg, createAcaunte, chackUser, firebaseDatabase } from '../../functions';
 
 const Login = ({ history }) => {
     const [isActive, changeActive] = useState(false);
@@ -14,8 +14,21 @@ const Login = ({ history }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
+    const [checked, isChecked] = useState(false);
     
     useEffect(() => {
+        if(localStorage.getItem('email')){
+            const localEmail = localStorage.getItem('email'),
+            localPassword = localStorage.getItem('password');
+            chackUser({
+                email: localEmail,
+                password: localPassword,
+                setLoading,
+                setLoginErrorMessage,
+                history,
+                checked
+            });
+        }
         firebaseDatabase().ref('Users').on("value", question => {
             let dataList = [];
             question.forEach(item => {
@@ -23,7 +36,6 @@ const Login = ({ history }) => {
             });
             changeTotalUsers(dataList[0].totalUsers)
         })
-
     }, [isActive])
 
     const checkPassword = () => {
@@ -136,6 +148,15 @@ const Login = ({ history }) => {
                                     }
                                 }}
                             />
+                            <form className='rememberMe'>
+                                <input 
+                                    type='checkbox'
+                                    onChange={() => {
+                                        isChecked(!checked)
+                                    }}
+                                />
+                                <h5>Remember me?</h5>
+                            </form>
                             <p className='errore'>{loginErrorMessage}</p>
                             <button
                                 disabled={(email && password) ? false : true}
@@ -148,7 +169,8 @@ const Login = ({ history }) => {
                                             password,
                                             setLoading,
                                             setLoginErrorMessage,
-                                            history
+                                            history,
+                                            checked
                                         });
                                     } else {
                                         setLoginErrorMessage('Check your username or password or register');

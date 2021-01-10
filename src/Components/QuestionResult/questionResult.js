@@ -15,7 +15,7 @@ const QuestionResult = ({ history }) => {
                     <table cellPadding="0" cellSpacing="0" border="0">
                         <thead>
                             <tr>
-                                <th>Question Num</th>
+                                <th>N</th>
                                 <th>Question</th>
                                 <th>Your answer</th>
                                 <th>Correct answer</th>

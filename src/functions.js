@@ -7,6 +7,7 @@ export const Reg = {
     emailReg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
     passwordReg: /^[a-z0-9_$-]{7,30}$/i
 }
+
 export const createAcaunte = ({
     totalUsers,
     firstName,
@@ -64,7 +65,8 @@ export const chackUser = ({
     password,
     setLoading,
     setLoginErrorMessage,
-    history
+    history,
+    checked
 }) => {
     if (email && password) {
         firebaseDatabase().ref('Admin').on("value", admin => {
@@ -74,7 +76,12 @@ export const chackUser = ({
             })
             admins.forEach(elem => {
                 if ((elem.login === email) && (elem.password === password)) {
-                    history.push('/Admin')
+                    if(checked){
+                        rememberMe(email,password);
+                        history.push('/Admin')
+                    }else{
+                        history.push('/Admin')
+                    }
                 }
             })
         })
@@ -83,9 +90,19 @@ export const chackUser = ({
                 let isSineIn = resp.operationType
                 if (isSineIn === 'signIn') {
                     if (checkAdmin(email)) {
-                        history.push('/Admin')
+                        if(checked){
+                            rememberMe(email,password);
+                            history.push('/Admin')
+                        }else{
+                            history.push('/Admin')
+                        }
                     } else {
-                        history.push('/questions')
+                        if(checked){
+                            rememberMe(email,password);
+                            userInformation(email,history)
+                        }else{
+                            userInformation(email,history)
+                        }
                     }
                 }
             })
@@ -142,7 +159,8 @@ export const nextQuestion = ({
     getViewResult,
     totalQuestion,
     question,
-    setQuestion
+    setQuestion,
+    questionType
 }) => {
     answers.push(radioValue);
     trueAnswers.push(data[questionNum].trueAnswer)
@@ -155,6 +173,7 @@ export const nextQuestion = ({
         setQuestionNum((questionNum + 1))
     } else {
         setResult(!result);
+        setPreviousQuestion(questionType,question,answers,trueAnswers)
         getResult(trueAnswers, answers, getViewResult)
     }
 }
@@ -164,12 +183,33 @@ export const CompleteAndExit = ({
     result,
     trueAnswers,
     answers,
-    getViewResult
+    getViewResult,
+    questionType,
+    question
 }) => {
     setResult(!result);
-    getResult(trueAnswers, answers, getViewResult)
+    getResult(trueAnswers, answers, getViewResult);
+    setPreviousQuestion(questionType,question,answers,trueAnswers);
 }
-
+const setPreviousQuestion = (questionType,question,answers,trueAnswers) => {
+    firebaseDatabase().ref(`Users/${sessionStorage.id}`).update({
+        previousQuestions:{
+            info:{
+                questionType,
+                question,
+                answers,
+                trueAnswers
+            }
+        }
+    })
+}
+export const getPreviousQuestionsData = (setPrevious) => {
+    firebaseDatabase().ref(`Users/${sessionStorage.id}/previousQuestions`).on('value',user => {
+        user.forEach(item => {
+            setPrevious(item.val())
+        })
+    })
+}
 export const checker = ({
     answer1,
     answer2,
@@ -183,7 +223,6 @@ export const checker = ({
     falseArray.forEach((item, index) => {
         for (let i = (index + 1); i < falseArray.length; i++) {
             if (item === falseArray[i]) {
-
                 coincidedAnswers += 1
             }
         }
@@ -465,3 +504,26 @@ export const deleteQuestionType = ({
     setQuestions(true)
     setNewQuestion(false)
 }
+export const userInformation = (email,history) => {
+    const users = [];
+    firebaseDatabase().ref('Users').on('value',userList => {
+        userList.forEach(user => {
+            users.push(user.val())
+        })
+    })
+    users.forEach(user => {
+        if(user.email === email){
+            sessionStorage.setItem('firstName', user.firstName);
+            sessionStorage.setItem('lastName', user.lastName);
+            sessionStorage.setItem('id', user.id);
+            history.push('/questions')
+        }
+    })    
+}
+export const rememberMe = (email,password) => {
+    localStorage.setItem('email', email);
+    localStorage.setItem('password',password)
+}
+// export const previousQuestion = () => {
+//     firebaseDatabase().ref()
+// }

@@ -114,9 +114,51 @@ p{
     transition: 0.25s ease;
     box-shadow: inset 0 0 0 5px #1b1bb6;
   }
-  @media only screen and (max-width: 720px) {
+  @media only screen and (max-width: 350px) {
     .panel{
-      width: 95%;
-      margin: auto;
+      margin-top: 55px;
     }
   }
+  @media only screen and (max-width: 768px) {
+    .questionTypeInput{
+      width: 95%;
+    }
+    .button{
+      padding: 5px;
+      font-size: 12px;
+    }
+    .questionInput,.ansvers,.trueAnswere{
+      font-size: 20px;
+    }
+  .panel{
+    width: 97%;
+    padding: 5px;
+  }
+  .questionType > p{
+    font-size: 22px;
+  }
+  .textarea{
+    border-radius: 15px;
+    min-height: 25px;
+    padding: 5px;
+  }
+  .questionAnswer, .textarea, .trueAnswers{
+      width: 95%;
+      height: 40px;
+  }
+  .forms{
+    margin: 2px;
+  }
+  .forms input {
+    position: absolute;
+    left: -9999px;
+  }
+  .forms input:checked + span {
+    font-size: 14px;
+  }
+    .forms span {
+      font-size:12px;
+      padding: 2px;
+    }
+  }
+ 

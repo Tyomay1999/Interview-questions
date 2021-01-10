@@ -8,7 +8,19 @@
   margin-top: -50px;
   color: 3f3f3f;
 }
-
+.rememberMe{
+  margin: 3px;
+  display: flex;
+  align-items: center;
+}
+.rememberMe > h5 {
+  display: flex;
+  justify-content: flex-start;
+}
+.rememberMe > input {
+    width: 15px;
+    height: 15px;
+}
 .login:after {
   position: absolute;
   content: "";
@@ -342,8 +354,9 @@ input::placeholder {
   }
 }
 @media only screen and (max-width: 450px) {
+  
   .login {
-    padding: 8px;
+    padding: 3px;
     margin: auto;
     width: 100%;
     font-weight: 200;

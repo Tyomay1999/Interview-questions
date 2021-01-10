@@ -1,6 +1,6 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap'); */
   .question{
-    overflow: hidden;
+    overflow-y: auto;
   }
   .buttons{
     display: flex;
@@ -33,10 +33,10 @@
     border-radius: 35%;
   }
   .infoButons{
-    overflow: hidden;
+    overflow-y: hidden;
     display: none;
     width: 100%;
-    height: 100vh;
+    height: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -269,6 +269,11 @@
   .modal{
     width: 95%;
   }
+  .test{
+    width: 100%;
+    height: 150px;
+    background-color: brown;
+  }
   #modal_container .modal_background .modal p {
     font-size: 15px;
     line-height: 18px;
@@ -328,7 +333,6 @@
   }
  
   .confirmAnswer ,.confirmAndExit{
-    margin-top: 15px;
     font-size: 12px;
     font-weight: 100;
     padding: 7px;

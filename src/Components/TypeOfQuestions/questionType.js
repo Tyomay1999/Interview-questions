@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import questionType from './questionType.module.css';
 import { Link } from "react-router-dom";
 import { firebaseDatabase } from '../../functions'
+import Header from '../Header/header';
 
-const QuestionType = () => {
+const QuestionType = ({history}) => {
     // if(prop.history.location.isLogin == undefined){
     //     return <Redirect to='/notFound' />
     // }
@@ -17,8 +18,12 @@ const QuestionType = () => {
             setDataQuestionType(questionsTypes)
         })
     },[])
+    // console.log()
     return (
         <>
+        <Header
+            history={history}
+        />
         <section className={questionType.questionType}>
             <div className={questionType.courses_container}>
             {dataQuestionType.map((item,index) => {

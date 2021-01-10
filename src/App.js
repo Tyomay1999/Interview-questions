@@ -6,6 +6,7 @@ import Question from './Components/Question/question';
 import NotFound from './Components/NotFound/notFound';
 import QuestionResult from './Components/QuestionResult/questionResult';
 import Admin from './Components/Admin/admin';
+import PreviousQuestion from './Components/PreviousQuestion/previousQuestion';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route exact path='/questions' component={QuestionType} />
         <Route path='/question' component={Question} />
         <Route path='/Result' component={QuestionResult} />
+        <Route path='/PreviousQuestion' component={PreviousQuestion} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

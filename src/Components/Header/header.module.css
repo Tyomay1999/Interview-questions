@@ -1,0 +1,12 @@
+.nav{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.nav > div {
+  color: antiquewhite;
+  margin: 5px;
+}
+.userInfo{
+  display: flex;
+}

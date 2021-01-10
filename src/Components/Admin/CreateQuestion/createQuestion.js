@@ -70,9 +70,11 @@ const CreateQuestion = (props) => {
                             })}
                         </form>
                         <button
+                            disabled={addedQuestionType ? true : false}
                             onClick={() => {
                                 setShowInput(!showInput)
                             }}
+                            className={createQuestionModule.button}
                         >{showInput ? "Close" : "Add"}</button>
                         <input
                             onChange={(e) => {
@@ -140,7 +142,7 @@ const CreateQuestion = (props) => {
 
                     className={createQuestionModule.questionAnswer}
                 />
-                <p>True Answer</p>
+                <p className={createQuestionModule.trueAnswere}>True Answer</p>
                 <input
                     disabled={showInput ? true : (answer2 ? false : true)}
                     type="text"
