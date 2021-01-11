@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import headerModule from './header.module.css'
+import headerModule from './header.module.css';
+import { withRouter } from 'react-router-dom';
+
 
 const Header = ({ history }) => {
     const [firstName] = useState(sessionStorage.firstName ? sessionStorage.getItem('firstName') : '');
@@ -37,4 +39,4 @@ const Header = ({ history }) => {
     )
 }
 
-export default Header;
+export default withRouter(Header);

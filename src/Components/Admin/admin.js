@@ -4,6 +4,7 @@ import Questions from './Questions/questions';
 import Users from './Users/users';
 import CreateQuestion from './CreateQuestion/createQuestion'
 import CreateUser from './CreateUser/createUser';
+import QuestionTimer from './QuestionTimer/questionTimer';
 
 const Admin = ({ history }) => {
   const [users, setUsers] = useState(true);
@@ -12,7 +13,8 @@ const Admin = ({ history }) => {
   const [newQuestion, setNewQuestion] = useState(false);
   const [user, setUser] = useState(false);
   const [question, setQuestion] = useState(false);
-  const [navBarIsOpen, setNavBarIsOpen] = useState(false)
+  const [navBarIsOpen, setNavBarIsOpen] = useState(false);
+  const [questionsTimer, setQuestionsTimer] = useState(false);
 
   return (
     <div className={adminModule.admin}>
@@ -33,6 +35,7 @@ const Admin = ({ history }) => {
                   setNewUsers(false);
                   setQuestions(false);
                   setNewQuestion(false);
+                  setQuestionsTimer(false)
                 }}>
                 <b>Users</b></li>
               <li
@@ -43,7 +46,8 @@ const Admin = ({ history }) => {
                   setNewUsers(true);
                   setQuestions(false);
                   setNewQuestion(false);
-                  setUser(false)
+                  setUser(false);
+                  setQuestionsTimer(false)
                 }}>
                 <b>Edit user</b></li>
               <li
@@ -54,6 +58,7 @@ const Admin = ({ history }) => {
                   setUsers(false);
                   setNewUsers(false);
                   setNewQuestion(false);
+                  setQuestionsTimer(false)
                 }}>
                 <b>Questions</b></li>
               <li
@@ -65,8 +70,20 @@ const Admin = ({ history }) => {
                   setQuestions(false);
                   setNewUsers(false);
                   setQuestion(false);
+                  setQuestionsTimer(false)
                 }}>
                 <b>Edit question</b></li>
+                <li
+                className={questionsTimer ? adminModule.active : ''}
+                onClick={() => {
+                  setNavBarIsOpen(false);
+                  setQuestions(false);
+                  setUsers(false);
+                  setNewUsers(false);
+                  setNewQuestion(false);
+                  setQuestionsTimer(true)
+                }}>
+                <b>Set timer on questions</b></li>
               <li
                 onClick={() => {
                   history.push('/');
@@ -99,6 +116,7 @@ const Admin = ({ history }) => {
             setNewQuestion={setNewQuestion}
             Question={question}
           /> : ''}
+          {questionsTimer ? <QuestionTimer/>: '' }
         </div>
       </div>
     </div>

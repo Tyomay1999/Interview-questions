@@ -115,13 +115,25 @@ export const chackUser = ({
         setLoginErrorMessage('Email or password is none')
     }
 }
-export const getData = (setData, isLoading, loading, questionType) => {
-    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).on("value", question => {
-        const questionlist = [];
+export const getData = (setData, isLoading, loading, questionType,setTimerHour,setTimerMinute) => {
+    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}`).on("value", question => {
+        let questionlist = [];
         const falseArray = [];
+        const info = [];
         question.forEach(item => {
-            questionlist.push(item.val());
+            if(Array.isArray(item.val())){
+                questionlist=item.val();
+            }else{
+                info.push(item.val())
+            }
         });
+        info.forEach(item => {
+            if(typeof(item) === 'object') {
+                setTimerHour(item.hour);
+                setTimerMinute((item.minute > 0) ? item.minute - 1 : item.minute);
+            }
+        })
+        
         questionlist.forEach((item, index) => {
             item.id = index
         })
@@ -441,7 +453,6 @@ export const editQuestion = ({
     id,
     setQuestions,
     setNewQuestion
-
 }) => {
     if (questionType) {
         if (question && answer1 && answer2 && answer3 && trueAnswer) {
@@ -490,7 +501,13 @@ export const addQuestionType = ({
     setAddedQuestionType,
     setShowInput
 }) => {
-    firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}`).update({ name: addedQuestionType });
+    firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}`).update({ 
+        name: addedQuestionType,
+        timer: {
+            hour: 0,
+            minute: 30
+        }
+    });
     setShowInput(false);
     setAddedQuestionType('');
 }
@@ -504,6 +521,7 @@ export const deleteQuestionType = ({
     setQuestions(true)
     setNewQuestion(false)
 }
+
 export const userInformation = (email,history) => {
     const users = [];
     firebaseDatabase().ref('Users').on('value',userList => {
@@ -524,6 +542,33 @@ export const rememberMe = (email,password) => {
     localStorage.setItem('email', email);
     localStorage.setItem('password',password)
 }
-// export const previousQuestion = () => {
-//     firebaseDatabase().ref()
-// }
+
+export const getQuestionsTimerInfo = (setData) => {
+    const questionsList = [];
+    firebaseDatabase().ref('QuestionType').on('value',questions => {
+        questions.forEach(item => {
+            questionsList.push(item.val())
+        })
+    })
+    setData(questionsList)
+}
+export const changeQuestionTimer = (name,hour,minute) => {
+    firebaseDatabase().ref(`QuestionType/${name.toUpperCase()}/timer`).update({
+        hour,
+        minute
+    })
+}
+
+export const plus = (prev) => {
+    if(prev || prev === 0 || prev > 0){
+        return prev + 1;
+    }
+}
+
+export const minus = (prev) => {
+    if (prev && prev > 0) {
+        return prev - 1;
+    } else {
+        return 0
+    }
+}

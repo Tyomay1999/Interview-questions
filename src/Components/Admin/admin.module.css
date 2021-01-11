@@ -147,13 +147,19 @@ header .logo span {
 .ul > li:nth-child(4).active {
   background-color: #16a085;
 }
-
-
 .ul > li:nth-child(5):hover {
-  background-color: #c42c2c;
+  background-color: #2980b9;
 }
 
 .ul > li:nth-child(5).active {
+  background-color: #16a085;
+}
+
+.ul > li:nth-child(6):hover {
+  background-color: #c42c2c;
+}
+
+.ul > li:nth-child(6).active {
   background-color: #c53838;
 }
 

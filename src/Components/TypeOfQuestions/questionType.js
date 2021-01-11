@@ -21,9 +21,7 @@ const QuestionType = ({history}) => {
     // console.log()
     return (
         <>
-        <Header
-            history={history}
-        />
+        <Header/>
         <section className={questionType.questionType}>
             <div className={questionType.courses_container}>
             {dataQuestionType.map((item,index) => {

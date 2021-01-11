@@ -19,10 +19,11 @@ const Question = ({ history, location }) => {
     const [loading, isLoading] = useState(true);
     const [radioValue, setRadioValue] = useState('');
     const [question, setQuestion] = useState([]);
+    const [timerHour, setTimerHour] = useState(0);
     const [timerMinute, setTimerMinute] = useState(29);
     const [timerSecond, setTimerSecond] = useState(59);
     if (!data && questionType) {
-        getData(setData, isLoading, loading, questionType)
+        getData(setData, isLoading, loading, questionType,setTimerHour,setTimerMinute)
     }
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -50,7 +51,7 @@ const Question = ({ history, location }) => {
         return () => {
             clearTimeout(timeout);
         }
-    }, [timerSecond, timerMinute, result, trueAnswers, answers,]);
+    }, [timerSecond, timerMinute, result, trueAnswers, answers]);
 
     if (questionType === undefined) {
         return <Redirect to='/notFound' />
