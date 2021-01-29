@@ -8,11 +8,16 @@
     flex-direction: column;
     overflow-y: scroll;
 }
+.info{
+  color: #6C7A89;
+  margin: 10px;
+  font-size: 35px;
+}
+
 .questionList{
-  /* overflow-y:scroll; */
   width: 100%;
   border: 3px solid black;
-  border-radius: 25px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,13 +37,17 @@
 }
 .itemQuestions{
   width: 100%;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   background-color: rgb(0, 0, 0);
 }
 .itemQuestionAnswers{
   display: flex;
   width: 100%;
+}
+.itemQuestion{
+  color: whitesmoke;
+text-align: center;
 }
 .questionCode{
   border: 2px solid black;
@@ -48,11 +57,14 @@
 .questionCod{
   color: black;
 }
+.itemAnswer{
+  border-bottom: 0.1px solid black;
+}
 .itemAnswers{
-  border-bottom-right-radius: 30px;
+  border-bottom-right-radius: 15px;
 }
 .itemTrueAnswers{
-  border-bottom-left-radius: 30px;
+  border-bottom-left-radius: 15px;
 }
 
 .itemAnswers,.itemTrueAnswers{
@@ -66,7 +78,7 @@
 }
 .itemAnswer{
   width: 100%;
-  overflow-x: scroll;
+  /* overflow-x: scroll; */
   color: black;
   text-align: center;
   width: 80%;
@@ -87,9 +99,6 @@
     text-align: center;
     margin-bottom: 15px;
   }
-  .questionTypeButtons{
-
-  }
   .questionTypeButton{
       color: rgb(255, 255, 255);
       border: 1px solid black;
@@ -100,9 +109,29 @@
     background-color: #f5f5f5;
   }
   @media only screen and (max-width: 720px) {
-    .Questions{
-      width: 95%;
+    .info{
+      color: #6C7A89;
+      margin: 10px;
+      font-size: 13px;
     }
+    .Questions{
+      width:100%;
+  }
+  .itemQuestion{
+    font-size: 15px;
+    margin: 7px;
+    text-align: center;
+  }
+  .questionCod{
+    font-size: 12px;
+  }
+  .itemTrueAnswer{
+    font-size: 10px;
+  }
+  .itemAnswer{
+    font-size: 10px;
+    border-bottom: 0.1px solid black;
+  }
   }
   
   ::-webkit-scrollbar {

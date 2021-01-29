@@ -1,4 +1,4 @@
-.modal{
+  .modal{
     width: 100%;
     height: 100vh;
     display: flex;
@@ -10,30 +10,42 @@
   color: #17181c;
   content: 'hello';
 }
+.errore{
+  font-size: 15px;
+}
 .panel{
-    width: 70%;
-    height: 700px;
+    width: 60%;
+    height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-color: rgb(0, 0, 0);
-    padding: 30px;
+    justify-content: space-around;
+	  background:linear-gradient(145deg,#464444,#242424 ) no-repeat;
+    padding: 10px;
     border-radius: 20px;
 }
-.panel > input::placeholder {
+.inputs > input::placeholder {
   color: black;
+}
+.inputs {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .questionAnswer, .textarea, .trueAnswers{
   color: #17181c;
-    width: 90%;
     height: 45px;
     background-color: white;
     outline-style: none;
 }
+.questionInput{
+  font-size: 45px;
+}
 p{
     margin: 5px;
-    font-size: 29px;
+    font-size: 25px;
     color: whitesmoke;
 }
 .buttons{
@@ -53,55 +65,20 @@ p{
     flex-wrap: wrap;
 
 }
-.forms{
-    margin: 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .forms input {
-    position: absolute;
-    left: -9999px;
-  }
-  .forms input:checked + span {
-    font-size: 20px;
-    color: #17181c;
-    background-color: #def12f;
-  }
-  .forms input:checked + span:before {
-    background-color: rgb(51, 253, 1);
-    box-shadow: inset 0 0 2px 5px #3987ec;
-  }
-  .forms span {
-    color: whitesmoke;
-    font-size:20px;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-align: center;
-            align-items: center;
-    padding: 3px;
-    border-radius: 30px;
-    -webkit-transition: 0.25s ease;
-    transition: 0.25s ease;
-  }
-  .forms span:hover {
-    background:  linear-gradient(100deg,#4f91f3,#4277b4 );
-  }
-  .forms span:before {
-    display: -webkit-box;
-    display: flex;
-    flex-shrink: 0;
-    content: "";
-    background-color: rgb(255, 255, 255);
-    width: 20px;
-    height: 20px;
-    border-radius: 25px;
-    margin-right:3px;
-    -webkit-transition: 0.25s ease;
-    transition: 0.25s ease;
-    box-shadow: inset 0 0 0 5px #1b1bb6;
-  }
+
   @media only screen and (max-width: 720px) {
-    
+  .panel{
+      width: 100%;
+      height: 500px;
+      border-radius: 15px;
+  }
+ 
+  .inputs {
+    width: 95%;
+  }
+
+  .questionInput{
+    font-size: 35px;
+  }
   }
   

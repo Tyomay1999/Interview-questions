@@ -5,8 +5,83 @@
 }
 .nav > div {
   color: antiquewhite;
+  padding: 5px;
   margin: 5px;
 }
 .userInfo{
   display: flex;
+}
+@media only screen and (max-width: 767px) {
+  .nav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav > div {
+    color: antiquewhite;
+    margin: 5px;
+  }
+  .userInfo{
+    display: flex;
+    align-items: center;
+  }
+  .userInfo > p {
+    text-align: center;
+    font-size: 17px;
+  }
+.headerButton{
+  font-size: 10px;
+  padding: 3px;
+}
+}
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  min-width: 60px;
+}
+.select select {
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  padding: 10px 15px;
+  outline: 0;
+  border: 0;
+  border-radius: 0;
+  background: #e6e6e6;
+  color: #7b7b7b;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 5px;
+}
+.select select::-ms-expand {
+  display: none;
+}
+.select select:hover,
+.select select:focus {
+  color: rgb(0, 11, 167);
+  background: #ccc;
+}
+.select select:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.select__arrow {
+  position: absolute;
+  top: 16px;
+  right: 15px;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0 5px;
+  border-color: #1300c0 transparent transparent transparent;
+}
+.select select:hover ~ .select__arrow,
+.select select:focus ~ .select__arrow {
+  border-top-color: rgb(0, 0, 0);
+}
+.select select:disabled ~ .select__arrow {
+  border-top-color: rgb(173, 6, 6);
 }

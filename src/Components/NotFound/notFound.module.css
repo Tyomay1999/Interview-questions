@@ -49,6 +49,13 @@
      #0065d3 28px 28px, #0065d3 29px 29px, #0065d3 30px 30px, #0065d3 31px 31px, #0065d4 32px 32px 
    
 }        
-
-
-
+@media only screen and (max-width: 767px) {
+  .notFound { 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 50%;
+    font-family: "Roboto", sans-serif;
+}
+}

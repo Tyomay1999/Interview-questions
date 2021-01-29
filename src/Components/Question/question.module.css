@@ -265,9 +265,12 @@
   .confirmAndExit:focus {
     box-shadow: inset 0 -3.25em 0 0 #3d73e9;
   }
-@media only screen and (max-width: 450px) {
+  @media only screen and (max-width: 767px) {
   .modal{
     width: 95%;
+  }
+  .modal_background {
+    background: aqua;
   }
   .test{
     width: 100%;

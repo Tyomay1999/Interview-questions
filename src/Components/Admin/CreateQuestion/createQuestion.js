@@ -17,7 +17,7 @@ const CreateQuestion = (props) => {
     const [answer4, setAnswer4] = useState(Question ? (Question.answers[3] ? Question.answers[3] : '') : '');
     const [newData, setNewData] = useState([]);
     const [Errore, setErrore] = useState('');
-    const [id, setId] = useState(Question ? Question.id : 0);
+    const [id] = useState(Question ? Question.id : 0);
 
     useEffect(() => {
         firebaseDatabase().ref('QuestionType').on("value", question => {
@@ -32,7 +32,7 @@ const CreateQuestion = (props) => {
     return (
         <div className={createQuestionModule.modal}>
             <div className={createQuestionModule.panel}>
-                {Errore ? <p>{Errore}</p> : ''}
+                {Errore ? <p className={createQuestionModule.errore}>{Errore}</p> : ''}
                 <div className={createQuestionModule.questionType}>
                     <p>{questionType ? questionType : 'Question type'}</p>
                     <div className={createQuestionModule.questionTypeButtons}>
@@ -220,7 +220,7 @@ const CreateQuestion = (props) => {
                         className={createQuestionModule.button}
                     >Edite</button>
                     <button
-                        disabled={Question ? false : true}
+                        disabled={(Question || questionType) ? false : true}
                         onClick={() => {
                             if (questionType && !question) {
                                 deleteQuestionType({
@@ -228,7 +228,7 @@ const CreateQuestion = (props) => {
                                     setQuestions,
                                     setNewQuestion
                                 })
-                            } else if (questionType && id) {
+                            } else if (questionType && (id || id === 0)) {
                                 deleteQuestion({
                                     questionType,
                                     setQuestions,

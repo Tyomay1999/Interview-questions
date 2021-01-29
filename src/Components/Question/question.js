@@ -22,25 +22,40 @@ const Question = ({ history, location }) => {
     const [timerHour, setTimerHour] = useState(0);
     const [timerMinute, setTimerMinute] = useState(29);
     const [timerSecond, setTimerSecond] = useState(59);
+    const [language,setLanguage] = useState(sessionStorage.getItem('language'));
+
     if (!data && questionType) {
-        getData(setData, isLoading, loading, questionType,setTimerHour,setTimerMinute)
+        getData(setData, isLoading, loading, questionType, setTimerHour, setTimerMinute)
     }
     useEffect(() => {
         const timeout = setTimeout(() => {
-            if (!timerSecond && timerMinute > 0) {
+            if (timerHour > 0 && !timerMinute && !timerSecond) {
+                setTimerHour(timerHour - 1);
+                setTimerMinute(59);
+                setTimerSecond(59);
+            } else if (timerHour > 0 && timerMinute > 0 && !timerSecond) {
                 setTimerMinute(timerMinute - 1);
-                setTimerSecond(59)
-            } else if (timerMinute && timerSecond) {
-                setTimerSecond(timerSecond - 1)
-            } else if (timerSecond && !timerMinute) {
-                setTimerSecond(timerSecond - 1)
-            } else if (!timerSecond && !timerMinute) {
+                setTimerSecond(59);
+            } else if (timerHour > 0 && !timerMinute && timerSecond > 0) {
+                setTimerSecond(timerSecond - 1);
+            } else if (timerHour > 0 && timerMinute > 0 && timerSecond > 0) {
+                setTimerSecond(timerSecond - 1);
+            } else if (!timerHour && !timerMinute && timerSecond > 0) {
+                setTimerSecond(timerSecond - 1);
+            } else if (!timerHour && timerMinute > 0 && !timerSecond) {
+                setTimerMinute(timerMinute - 1);
+                setTimerSecond(59);
+            } else if (!timerHour && timerMinute > 0 && timerSecond > 0) {
+                setTimerSecond(timerSecond - 1);
+            } else if (!timerHour && !timerSecond && !timerMinute) {
                 CompleteAndExit({
                     setResult,
                     result,
                     trueAnswers,
                     answers,
-                    getViewResult
+                    getViewResult,
+                    questionType,
+                    question
                 });
                 return clearTimeout(timeout)
             }
@@ -51,7 +66,7 @@ const Question = ({ history, location }) => {
         return () => {
             clearTimeout(timeout);
         }
-    }, [timerSecond, timerMinute, result, trueAnswers, answers]);
+    }, [timerSecond, timerMinute,timerHour, result, trueAnswers, answers,questionType,question]);
 
     if (questionType === undefined) {
         return <Redirect to='/notFound' />
@@ -64,14 +79,19 @@ const Question = ({ history, location }) => {
 
     return (
         <>
-        <Header/>
+             <Header/>
             <div className={questionModule.question}>
                 <div className={result ? `${questionModule.result}` : `${questionModule.close}`}>
                     <div className={questionModule.infoButons} >
                         <div
                             className={resultWindow ? `${questionModule.result}` : `${questionModule.close}`
                             }>
-                            <h1>You typed {viewResult} out of {data[(data.length - 1)].totalQuestion}</h1>
+                            <h1>
+                            {(language === 'EN') ? `You typed ${viewResult} out of ` : (language === 'RU') ? `Вы набрали ${viewResult} из ` : `Դուք հավաքել եք ${viewResult}/`}
+
+                                 
+                            {data[(data.length - 1)].totalQuestion}
+                            </h1>
                             <Link
                                 className={questionModule.button}
                                 to={{
@@ -81,14 +101,21 @@ const Question = ({ history, location }) => {
                                     questionType,
                                     question
                                 }}
-                            >See your answers to questions</Link>
+                            >
+                            {(language === 'EN') ? "See your answers to questions" : (language === 'RU') ? "Смотрите ваши ответы на вопросы" : "Մանրամասն"}
+                            </Link>
                         </div>
                         <button
                             className={!resultWindow ? `${questionModule.button}` : `${questionModule.close}`}
                             onClick={() => {
                                 setResultWindow(!resultWindow)
-                            }}>Result</button>
-                        <Link className={questionModule.button} to='/questions'>Home</Link>
+                            }}>
+                        {(language === 'EN') ? "Result" : (language === 'RU') ? "Результат" : "Դիտել արդյունքը"}
+                                
+                                </button>
+                        <Link className={questionModule.button} to='/questions'>
+                        {(language === 'EN') ? "Back" : (language === 'RU') ? "Назад" : "Վերադառնալ"}
+                        </Link>
                     </div>
                 </div>
                 <div
@@ -97,8 +124,9 @@ const Question = ({ history, location }) => {
                 >
                     <div className={questionModule.modal_background} key={questionNum + 1}>
                         <div className={questionModule.modal} >
-                        <h2 className={questionModule.questionText} >
-                                Question {(questionNum + 1)}/{data[(data.length - 1)].totalQuestion}
+                            <h2 className={questionModule.questionText} >
+                            {(language === 'EN') ? "Question " : (language === 'RU') ? "Вопрос " : "Հարց "}
+                            {(questionNum + 1)}/{data[(data.length - 1)].totalQuestion}
                             </h2 >
                             <div className={questionModule.resultQuestion}>
                                 {
@@ -126,6 +154,10 @@ const Question = ({ history, location }) => {
                             </div>
                             <div className={questionModule.timer}>
                                 <h6>
+                                    <span className={questionModule.tiem}>
+                                        {((timerHour - 9) > 0) ? timerHour : `0${timerHour}`}
+                                    </span>
+                                :
                                     <span className={questionModule.tiem}>
                                         {((timerMinute - 9) > 0) ? timerMinute : `0${timerMinute}`}
                                     </span>
@@ -166,8 +198,11 @@ const Question = ({ history, location }) => {
                                                     </label>
                                                 )
                                             }
+                                            return null
                                         })
-                                            : history.push('/questions')}
+                                            :
+                                    history.push('/questions')
+                                    }
                                 </form>
                             </div>
                             <div className={questionModule.buttons}>
@@ -185,8 +220,8 @@ const Question = ({ history, location }) => {
                                         });
                                     }}
                                 >
-                                    Complete and exit
-                        </button>
+                            {(language === 'EN') ? "Complete and exit" : (language === 'RU') ? "Завершить и выйти" : "Ավարտել և դուրս գալ"}
+                                </button>
                                 <button
                                     className={questionModule.confirmAnswer}
                                     disabled={radioValue ? '' : 'disabled'}
@@ -212,8 +247,10 @@ const Question = ({ history, location }) => {
                                     }}
                                 >
                                     {
-                                        (questionNum + 1 < data[(data.length - 1)].totalQuestion) ? 'Next question'
-                                            : 'Finish'
+                                        (questionNum + 1 < data[(data.length - 1)].totalQuestion) ? 
+                                        `${(language === 'EN') ? "Next question" : (language === 'RU') ? "Следующий вопрос" : "Հաջորդ հարցը"}`
+                                            : 
+                                        `${(language === 'EN') ? "Finish" : (language === 'RU') ? "завершить" : "Ավարտել"}`
                                     }
                                 </button>
                             </div>

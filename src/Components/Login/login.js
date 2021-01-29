@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './login.css';
+import loginModule from './login.module.css';
 import './button.css';
 import { Reg, createAcaunte, chackUser, firebaseDatabase } from '../../functions';
-
 const Login = ({ history }) => {
     const [isActive, changeActive] = useState(false);
     const [registerErrorMessage, setRegisterErrorMessage] = useState('');
@@ -15,11 +14,12 @@ const Login = ({ history }) => {
     const [lastName, setLastName] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
     const [checked, isChecked] = useState(false);
-    
+    const [language, setLanguage] = useState('EN');
+
     useEffect(() => {
-        if(localStorage.getItem('email')){
+        if (localStorage.getItem('email')) {
             const localEmail = localStorage.getItem('email'),
-            localPassword = localStorage.getItem('password');
+                localPassword = localStorage.getItem('password');
             chackUser({
                 email: localEmail,
                 password: localPassword,
@@ -36,7 +36,7 @@ const Login = ({ history }) => {
             });
             changeTotalUsers(dataList[0].totalUsers)
         })
-    }, [isActive])
+    }, [isActive, checked, history])
 
     const checkPassword = () => {
         if (password !== '') {
@@ -65,14 +65,34 @@ const Login = ({ history }) => {
 
     return (
         <>
-            <div className='login'>
-                <div className={`${isActive ? 'container right-panel-active' : 'container'}`} id='container'>
-                    <div className="form-container sign-up-container">
-                        <div className='form'>
-                            <h1>Register</h1>
+            <header className={loginModule.Lang}>
+                <div className={loginModule['control-group']}>
+                    <div className={loginModule.select}>
+                        <select onChange={(e) => { 
+                            setLanguage(e.target.value);
+                            sessionStorage.setItem('language',e.target.value)
+                         }}>
+                            <option selected={(sessionStorage.language === 'EN') ? 'selected' : ''}>EN</option>
+                            <option selected={(sessionStorage.language === 'RU') ? 'selected' : ''}>RU</option>
+                            <option selected={(sessionStorage.language === 'HY') ? 'selected' : ''}>HY</option>
+                        </select>
+                        <div className={loginModule.select__arrow}></div>
+                    </div>
+                </div>
+            </header>
+            <div className={loginModule.login}>
+                <div
+                    className={`${isActive ?
+                        `${loginModule.container} ${loginModule['right-panel-active']}`
+                        : `${loginModule.container}`}`}
+                    id={loginModule.container}
+                >
+                    <div className={`${loginModule['form-container']} ${loginModule['sign-up-container']}`}>
+                        <div className={loginModule.form}>
+                            <h1>{(language === 'EN') ? "Register" : (language === 'RU') ? "Регистрация" : "Գրանցվել"}</h1>
                             <input
                                 type="text"
-                                placeholder="FirstName"
+                                placeholder={(language === 'EN') ? "FirstName" : (language === 'RU') ? "Имя" : "Անուն"}
                                 onChange={(e) => {
                                     setFirstName(e.target.value)
                                 }}
@@ -80,7 +100,7 @@ const Login = ({ history }) => {
                             <input
                                 disabled={firstName ? false : true}
                                 type="text"
-                                placeholder="LastName"
+                                placeholder={(language === 'EN') ? "LastName" : (language === 'RU') ? "Фамилия" : "Ազգանուն"}
                                 onChange={(e) => {
                                     setLastName(e.target.value)
                                 }}
@@ -88,7 +108,7 @@ const Login = ({ history }) => {
                             <input
                                 disabled={lastName ? false : true}
                                 type="email"
-                                placeholder="Email"
+                                placeholder={(language === 'EN') ? "Email" : (language === 'RU') ? "Почта" : "էլ. Հասցե"}
                                 onChange={(e) => {
                                     if (Reg.emailReg.test(e.target.value.toLocaleLowerCase())) {
                                         setEmail(e.target.value.toLocaleLowerCase())
@@ -98,7 +118,7 @@ const Login = ({ history }) => {
                             <input
                                 disabled={email ? false : true}
                                 type='password'
-                                placeholder="Password"
+                                placeholder={(language === 'EN') ? "Password" : (language === 'RU') ? "Пароль" : "Գաղնաբառ"}
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
                                         setPassword(e.target.value)
@@ -107,31 +127,32 @@ const Login = ({ history }) => {
                             />
                             <input
                                 disabled={password ? false : true}
-                                placeholder="Confirm Password"
                                 type='password'
+                                placeholder={(language === 'EN') ? "Confirm Password" : (language === 'RU') ? "Повторите Пароль" : "Կրկնել Գաղնաբառ"}
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
                                         setConPassword(e.target.value)
                                     }
                                 }}
                             />
-                            <p className='errore'>{registerErrorMessage}</p>
+                            <p className={loginModule.errore}>{registerErrorMessage}</p>
                             <button
                                 disabled={conPassword ? false : true}
-                                className={loading ? 'btn is-active' : 'btn'}
+                                className={loading ? `btn is-active` : `btn`}
                                 onClick={() => {
                                     setLoading(!loading);
                                     checkPassword()
                                 }}>
-                                Register</button>
+                                {(language === 'EN') ? "Confirm Register" : (language === 'RU') ? "Регистрация" : "Գրանցվել"}
+                            </button>
                         </div>
                     </div>
-                    <div className="form-container sign-in-container">
-                        <div className='form'>
-                            <h1>Login</h1>
+                    <div className={`${loginModule['form-container']} ${loginModule['sign-in-container']}`}>
+                        <div className={loginModule.form}>
+                            <h1>{(language === 'EN') ? "Login" : (language === 'RU') ? "Авторизоваться" : "Մուտք"}</h1>
                             <input
-                                placeholder="Email"
                                 type='email'
+                                placeholder={(language === 'EN') ? "Email" : (language === 'RU') ? "Почта" : "էլ. Հասցե"}
                                 onChange={(e) => {
                                     if (Reg.emailReg.test(e.target.value.toLocaleLowerCase())) {
                                         setEmail(e.target.value.toLocaleLowerCase())
@@ -139,28 +160,29 @@ const Login = ({ history }) => {
                                 }}
                             />
                             <input
-                                disabled={email ? false : true}
-                                placeholder="Password"
                                 type='password'
+                                disabled={email ? false : true}
+                                placeholder={(language === 'EN') ? "Password" : (language === 'RU') ? "Пароль" : "Գաղնաբառ"}
                                 onChange={(e) => {
                                     if (Reg.passwordReg.test(e.target.value)) {
                                         setPassword(e.target.value)
                                     }
                                 }}
                             />
-                            <form className='rememberMe'>
-                                <input 
+                            <form className={loginModule.rememberMe} onClick={() => { isChecked(!checked) }}>
+                                <input
                                     type='checkbox'
                                     onChange={() => {
                                         isChecked(!checked)
                                     }}
                                 />
-                                <h5>Remember me?</h5>
+
+                                <h5>{(language === 'EN') ? "Remember me?" : (language === 'RU') ? "Запомнить меня?" : "Հիշել ինձ?"}</h5>
                             </form>
-                            <p className='errore'>{loginErrorMessage}</p>
+                            <p className={loginModule.errore}>{loginErrorMessage}</p>
                             <button
                                 disabled={(email && password) ? false : true}
-                                className={loading ? 'btn is-active' : 'btn'}
+                                className={loading ? `btn is-active` : `btn`}
                                 onClick={() => {
                                     if (password && email) {
                                         setLoading(!loading);
@@ -176,13 +198,15 @@ const Login = ({ history }) => {
                                         setLoginErrorMessage('Check your username or password or register');
                                     }
                                 }}
-                            >Login</button>
+                            >
+                                {(language === 'EN') ? "Login" : (language === 'RU') ? "Авторизоваться" : "Մուտք"}
+                            </button>
                         </div>
                     </div>
-                    <div className="overlay-container">
+                    <div className={loginModule['overlay-container']}>
 
-                        <div className="overlay">
-                            <div className="bg-bubbles">
+                        <div className={loginModule.overlay}>
+                            <div className={loginModule['bg-bubbles']}>
                                 <li></li>
                                 <li></li>
                                 <li></li>
@@ -195,12 +219,13 @@ const Login = ({ history }) => {
                                 <li></li>
                             </div>
 
-                            <div className="overlay-panel overlay-left">
-                                <h1>Welcome Back!</h1>
-                                <p>To keep connected with us please login with your personal info</p>
+                            <div className={`${loginModule['overlay-panel']} ${loginModule['overlay-left']}`}>
+                                <p>
+                                    {(language === 'EN') ? "To register, enter your personal data and sign in to the system" : (language === 'RU') ? "Для регистрации вводите свои личные данные и осуществите входите в систему" : "Գրանցվելու համար մուտքագրեք ձեր անձնական տվյալները և մուտք գործեք համակարգ"}
+                                </p>
                                 <button
-                                    className="ghost"
-                                    id="signIn"
+                                    className='ghost'
+                                    id='signIn'
                                     onClick={() => {
                                         if (loading) {
                                             setLoading(false)
@@ -209,11 +234,18 @@ const Login = ({ history }) => {
                                             changeActive(!isActive)
                                         }
                                     }}
-                                >Sign In</button>
+                                >
+                                    {(language === 'EN') ? "Sign in" : (language === 'RU') ? "Войти в систему" : "Մուտք գործել"}
+                                </button>
                             </div>
-                            <div className="overlay-panel overlay-right">
-                                <h1>Hello, Friend!</h1>
-                                <p>Enter your personal details and start journey with us</p>
+                            <div className={`${loginModule['overlay-panel']} ${loginModule['overlay-right']}`}>
+                                <h1>
+                                    {(language === 'EN') ? "Hello, Friend!" : (language === 'RU') ? "Привет!" : "Ողջույն!"}
+                                </h1>
+                                <p>
+                                    {(language === 'EN') ? "Enter your personal details and start testing your skills with us" : (language === 'RU') ? "Введите свои личные данные и начните проверять свои навыки в месте с нами" : "Մուտքագրեք ձեր անձնական տվյալները և սկսեք ստուգել ձեր հմտությունները մեզ հետ"}
+                                </p>
+
                                 <button
                                     className="ghost"
                                     id="signUp"
@@ -225,7 +257,9 @@ const Login = ({ history }) => {
                                             changeActive(!isActive)
                                         }
                                     }}
-                                >Register</button>
+                                >
+                                    {(language === 'EN') ? "Register" : (language === 'RU') ? "Регистрация" : "Գրանցվել"}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -236,3 +270,4 @@ const Login = ({ history }) => {
 
 }
 export default Login;
+

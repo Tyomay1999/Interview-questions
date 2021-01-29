@@ -1,0 +1,149 @@
+a{
+    text-decoration: none;
+}
+
+/* btn */
+.language{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.btn-wrap {
+    display: flex;
+    justify-content : center;
+    align-items : center;
+    height: 100vh;
+}
+
+.btn-wrap > a {
+    background-color:#fce4ec;
+    display:inline-block;
+    color: rgba(0,0,0,0.7);
+    padding: 13px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    height:23px;
+    line-height: 23px;
+    margin:5px;
+    border-radius: 3px;
+}
+
+.text{
+    color: black;
+    text-align: center;
+}
+
+/* modal */
+#modal1{
+    display: none;
+}
+
+#modal {
+    position: fixed;
+     left:0;
+     top:0;
+     width: 100%;
+     height: 100%;
+     display: block;
+}
+
+#modal .modal-bg {
+    background: rgba(0,0,0,0.7);
+     display:flex;
+     align-items: center;
+     justify-content: center;
+     height: 100%;
+}
+
+#modal .modal-bg .modal-cont {
+    position:relative;
+    background: #fff;
+    padding: 40px;
+    min-width: 300px;
+    max-width: 850px;
+    min-height: 150px;
+    max-height: 500px;
+    display: inline-block;
+}
+
+#modal .modal-bg .modal-cont h2 {
+    font-size: 30px;
+    margin:0;
+}
+
+#modal .modal-bg .modal-cont p {
+    font-size: 25px;
+}
+
+#modal .modal-bg .modal-cont .close {
+    position: absolute;
+    top: 0;
+    right:0;
+    margin:20px;
+    padding: 10px;
+    background: #000;
+    border-radius: 5%; 
+}
+.close{
+  cursor: pointer;
+  color: #fce4ec;
+}
+#modal .modal-bg .modal-cont .close svg {
+    width: 24px;
+    fill: #fff;
+    vertical-align: top;
+}
+.control-group{
+    width: 70px;
+    margin-left: 10px;
+}
+.select {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%;
+}
+.select select {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 15px;
+    outline: 0;
+    border: 0;
+    border-radius: 0;
+    background: #e6e6e6;
+    color: #7b7b7b;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  .select select::-ms-expand {
+    display: none;
+  }
+  .select select:hover,
+  .select select:focus {
+    color: #000;
+    background: #ccc;
+  }
+  .select select:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .select__arrow {
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 8px 5px 0 5px;
+    border-color: #7b7b7b transparent transparent transparent;
+  }
+  .select select:hover ~ .select__arrow,
+  .select select:focus ~ .select__arrow {
+    border-top-color: #000;
+  }
+  .select select:disabled ~ .select__arrow {
+    border-top-color: #ccc;
+  }
+  

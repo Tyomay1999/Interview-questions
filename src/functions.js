@@ -1,6 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';
+
+export const firebaseInitializeApp = firebase.initializeApp
 export const firebaseAuth = firebase.auth;
 export const firebaseDatabase = firebase.database;
 export const Reg = {
@@ -26,7 +28,8 @@ export const createAcaunte = ({
             firstName,
             lastName,
             email,
-            password
+            password,
+            isNewUser: true
         })
         firebaseDatabase().ref(`Users/0`).update({
             totalUsers: totalUsers + 1
@@ -76,11 +79,13 @@ export const chackUser = ({
             })
             admins.forEach(elem => {
                 if ((elem.login === email) && (elem.password === password)) {
-                    if(checked){
-                        rememberMe(email,password);
+                    if (checked) {
+                        rememberMe(email, password);
                         history.push('/Admin')
-                    }else{
+                        sessionStorage.setItem('email', email)
+                    } else {
                         history.push('/Admin')
+                        sessionStorage.setItem('email', email)
                     }
                 }
             })
@@ -90,18 +95,22 @@ export const chackUser = ({
                 let isSineIn = resp.operationType
                 if (isSineIn === 'signIn') {
                     if (checkAdmin(email)) {
-                        if(checked){
-                            rememberMe(email,password);
+                        if (checked) {
+                            rememberMe(email, password);
                             history.push('/Admin')
-                        }else{
+                            sessionStorage.setItem('email', email)
+
+                        } else {
                             history.push('/Admin')
+                            sessionStorage.setItem('email', email)
+
                         }
                     } else {
-                        if(checked){
-                            rememberMe(email,password);
-                            userInformation(email,history)
-                        }else{
-                            userInformation(email,history)
+                        if (checked) {
+                            rememberMe(email, password);
+                            userInformation(email, history)
+                        } else {
+                            userInformation(email, history)
                         }
                     }
                 }
@@ -115,25 +124,25 @@ export const chackUser = ({
         setLoginErrorMessage('Email or password is none')
     }
 }
-export const getData = (setData, isLoading, loading, questionType,setTimerHour,setTimerMinute) => {
+export const getData = (setData, isLoading, loading, questionType, setTimerHour, setTimerMinute) => {
     firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}`).on("value", question => {
         let questionlist = [];
         const falseArray = [];
         const info = [];
         question.forEach(item => {
-            if(Array.isArray(item.val())){
-                questionlist=item.val();
-            }else{
+            if (Array.isArray(item.val())) {
+                questionlist = item.val();
+            } else {
                 info.push(item.val())
             }
         });
         info.forEach(item => {
-            if(typeof(item) === 'object') {
+            if (typeof (item) === 'object') {
                 setTimerHour(item.hour);
                 setTimerMinute((item.minute > 0) ? item.minute - 1 : item.minute);
             }
         })
-        
+
         questionlist.forEach((item, index) => {
             item.id = index
         })
@@ -185,7 +194,7 @@ export const nextQuestion = ({
         setQuestionNum((questionNum + 1))
     } else {
         setResult(!result);
-        setPreviousQuestion(questionType,question,answers,trueAnswers)
+        setPreviousQuestion(questionType, question, answers, trueAnswers)
         getResult(trueAnswers, answers, getViewResult)
     }
 }
@@ -201,12 +210,12 @@ export const CompleteAndExit = ({
 }) => {
     setResult(!result);
     getResult(trueAnswers, answers, getViewResult);
-    setPreviousQuestion(questionType,question,answers,trueAnswers);
+    setPreviousQuestion(questionType, question, answers, trueAnswers);
 }
-const setPreviousQuestion = (questionType,question,answers,trueAnswers) => {
+const setPreviousQuestion = (questionType, question, answers, trueAnswers) => {
     firebaseDatabase().ref(`Users/${sessionStorage.id}`).update({
-        previousQuestions:{
-            info:{
+        previousQuestions: {
+            info: {
                 questionType,
                 question,
                 answers,
@@ -216,7 +225,7 @@ const setPreviousQuestion = (questionType,question,answers,trueAnswers) => {
     })
 }
 export const getPreviousQuestionsData = (setPrevious) => {
-    firebaseDatabase().ref(`Users/${sessionStorage.id}/previousQuestions`).on('value',user => {
+    firebaseDatabase().ref(`Users/${sessionStorage.id}/previousQuestions`).on('value', user => {
         user.forEach(item => {
             setPrevious(item.val())
         })
@@ -272,6 +281,7 @@ export const UserCreate = ({
     if (email && password && lastName && firstName) {
         firebaseAuth().createUserWithEmailAndPassword(email, password)
         firebaseDatabase().ref(`Users/${totalUsers + 1}`).update({
+            isNewUser:true,
             isAdmin,
             id: (totalUsers + 1),
             firstName,
@@ -341,7 +351,8 @@ export const deleteUser = ({
     setNewUsers,
     email
 }) => {
-    userDeleter[0].totalUsers -= 1;
+    if(email !== sessionStorage.email){
+        userDeleter[0].totalUsers -= 1;
     const falseArray = [];
     userDeleter.forEach((item, index) => {
         if (item.email === email) {
@@ -371,6 +382,9 @@ export const deleteUser = ({
     setLoading(!loading);
     setUsers(true);
     setNewUsers(false);
+    }else{
+        setErrore('You cannot delete yourself');
+    }
 }
 
 export const creater = ({
@@ -396,7 +410,7 @@ export const creater = ({
 }) => {
     if (questionType) {
         if (question && answer1 && answer2 && answer3 && trueAnswer) {
-            if (checker({answer1, answer2, answer3, answer4, trueAnswer})) {
+            if (checker({ answer1, answer2, answer3, answer4, trueAnswer })) {
                 firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).on('value', questions => {
                     questions.forEach(item => {
                         newData.push(item.val())
@@ -456,7 +470,7 @@ export const editQuestion = ({
 }) => {
     if (questionType) {
         if (question && answer1 && answer2 && answer3 && trueAnswer) {
-            if (checker({answer1, answer2, answer3, answer4, trueAnswer})) {
+            if (checker({ answer1, answer2, answer3, answer4, trueAnswer })) {
                 firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}/${id}`).update({
                     question,
                     answers: [answer1, answer2, answer3, answer4],
@@ -492,26 +506,16 @@ export const deleteQuestion = ({
     id
 }) => {
     firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}/${id}`).remove()
+    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).on('value', questions => {
+        const questionsList = [];
+        questions.forEach(elem => {
+            questionsList.push(elem.val())
+        })
+        firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).update(questionsList)
+    })
     setQuestions(true)
     setNewQuestion(false)
 }
-
-export const addQuestionType = ({
-    addedQuestionType,
-    setAddedQuestionType,
-    setShowInput
-}) => {
-    firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}`).update({ 
-        name: addedQuestionType,
-        timer: {
-            hour: 0,
-            minute: 30
-        }
-    });
-    setShowInput(false);
-    setAddedQuestionType('');
-}
-
 export const deleteQuestionType = ({
     questionType,
     setQuestions,
@@ -522,45 +526,75 @@ export const deleteQuestionType = ({
     setNewQuestion(false)
 }
 
-export const userInformation = (email,history) => {
+
+export const addQuestionType = ({
+    addedQuestionType,
+    setAddedQuestionType,
+    setShowInput
+}) => {
+    firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}`).update({
+        name: addedQuestionType,
+        timer: {
+            hour: 0,
+            minute: 30
+        }
+    });
+    setShowInput(false);
+    setAddedQuestionType('');
+}
+
+
+export const userInformation = (email, history) => {
     const users = [];
-    firebaseDatabase().ref('Users').on('value',userList => {
+    firebaseDatabase().ref('Users').on('value', userList => {
         userList.forEach(user => {
             users.push(user.val())
         })
     })
     users.forEach(user => {
-        if(user.email === email){
+        if (user.email === email) {
             sessionStorage.setItem('firstName', user.firstName);
+            sessionStorage.setItem('language', user.language);
             sessionStorage.setItem('lastName', user.lastName);
             sessionStorage.setItem('id', user.id);
-            history.push('/questions')
+            if(user.isNewUser){
+                history.push('/info')
+            }else{
+                history.push('/questions')
+            }
         }
-    })    
+    })
 }
-export const rememberMe = (email,password) => {
+export const rememberMe = (email, password) => {
     localStorage.setItem('email', email);
-    localStorage.setItem('password',password)
+    localStorage.setItem('password', password)
 }
 
 export const getQuestionsTimerInfo = (setData) => {
     const questionsList = [];
-    firebaseDatabase().ref('QuestionType').on('value',questions => {
+    firebaseDatabase().ref('QuestionType').on('value', questions => {
         questions.forEach(item => {
             questionsList.push(item.val())
         })
     })
-    setData(questionsList)
+    setData(questionsList);
 }
-export const changeQuestionTimer = (name,hour,minute) => {
-    firebaseDatabase().ref(`QuestionType/${name.toUpperCase()}/timer`).update({
-        hour,
-        minute
-    })
+export const changeQuestionTimer = (name, hour, minute) => {
+    if (minute > 60) {
+        hour = (+hour) + 1;
+        minute = (+minute) - 60;
+        changeQuestionTimer(name, hour, minute)
+    } else {
+        firebaseDatabase().ref(`QuestionType/${name.toUpperCase()}/timer`).update({
+            hour,
+            minute
+        })
+    }
 }
 
+
 export const plus = (prev) => {
-    if(prev || prev === 0 || prev > 0){
+    if (prev || prev === 0 || prev > 0) {
         return prev + 1;
     }
 }
@@ -571,4 +605,16 @@ export const minus = (prev) => {
     } else {
         return 0
     }
+}
+export const logOut = (history) => {
+    sendLanguage(sessionStorage.language)
+    sessionStorage.clear();
+    localStorage.clear();
+    history.push('/')
+}
+export const sendLanguage = (language) => {
+    firebaseDatabase().ref(`Users/${sessionStorage.id}`).update({
+        isNewUser: false,
+        language
+    })
 }

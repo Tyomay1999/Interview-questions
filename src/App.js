@@ -7,6 +7,7 @@ import NotFound from './Components/NotFound/notFound';
 import QuestionResult from './Components/QuestionResult/questionResult';
 import Admin from './Components/Admin/admin';
 import PreviousQuestion from './Components/PreviousQuestion/previousQuestion';
+import InfoModal from './Components/InfoModal/infoModal';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path='/question' component={Question} />
         <Route path='/Result' component={QuestionResult} />
         <Route path='/PreviousQuestion' component={PreviousQuestion} />
+        <Route path='/info' component={InfoModal} />
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

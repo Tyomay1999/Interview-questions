@@ -27,16 +27,16 @@ const Questions = ({setQuestion,setQuestions,setNewQuestion}) => {
                 questionsList.push(item.val());
             });
             setAllQuestionType(questionsList)
-            // setUserDeleter(questionsList)
         })
         get(quesType,setQuestionData)
     },[quesType])
-        // firebase.database().ref('Html/').remove()
-    // console.log("🚀 ~ file: questions.js ~ line 10 ~ Questions ~ questionData", questionData)
     
     return (
         <section className={questionsModule.Questions}>
             <div className={questionsModule.questionTypeButtons}>
+                <h2 className={questionsModule.info}>
+                    Double click to edit or delete a question
+                </h2>
                 <h1 className={questionsModule.h1}>{quesType}</h1>
                 {allQuestionType.map((item,index) => {
                     return (
@@ -83,8 +83,12 @@ const Questions = ({setQuestion,setQuestions,setNewQuestion}) => {
                                 <div className={questionsModule.itemAnswers} key={index+1}>
                                     <p className={questionsModule.itemAnswer}>{answers[0]}</p>
                                     <p className={questionsModule.itemAnswer}>{answers[1]}</p>
-                                    <p className={questionsModule.itemAnswer}>{answers[2]}</p>
-                                    <p className={questionsModule.itemAnswer}>{answers[3]}</p>
+                                    {
+                                        answers[2] && <p className={questionsModule.itemAnswer}>{answers[2]}</p>
+                                    }
+                                    {
+                                        answers[3] && <p className={questionsModule.itemAnswer}>{answers[3]}</p>
+                                    }
                                 </div>
                             </div>
                         </div>

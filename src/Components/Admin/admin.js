@@ -5,6 +5,7 @@ import Users from './Users/users';
 import CreateQuestion from './CreateQuestion/createQuestion'
 import CreateUser from './CreateUser/createUser';
 import QuestionTimer from './QuestionTimer/questionTimer';
+import { logOut } from '../../functions';
 
 const Admin = ({ history }) => {
   const [users, setUsers] = useState(true);
@@ -72,7 +73,7 @@ const Admin = ({ history }) => {
                   setQuestion(false);
                   setQuestionsTimer(false)
                 }}>
-                <b>Edit question</b></li>
+                <b>Add or change a question</b></li>
                 <li
                 className={questionsTimer ? adminModule.active : ''}
                 onClick={() => {
@@ -83,10 +84,10 @@ const Admin = ({ history }) => {
                   setNewQuestion(false);
                   setQuestionsTimer(true)
                 }}>
-                <b>Set timer on questions</b></li>
+                <b>Timer control</b></li>
               <li
                 onClick={() => {
-                  history.push('/');
+                  logOut(history)
                 }}
               ><b>Log out</b></li>
             </ul>

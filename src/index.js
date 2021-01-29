@@ -2,22 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import './index.css';
-import firebase from 'firebase/app'; 
-import 'firebase/database'; 
-import 'firebase/auth';
-
-
+import { firebaseInitializeApp } from './functions'
 
 let firebaseConfig = {
-  apiKey: "AIzaSyCP1YifmRYAjn1eEO4uo18XdGnEtpzzq6M",
-  authDomain: "it-interview-questions-ce3b5.firebaseapp.com",
-  databaseURL: "https://it-interview-questions-ce3b5-default-rtdb.firebaseio.com",
-  projectId: "it-interview-questions-ce3b5",
-  storageBucket: "it-interview-questions-ce3b5.appspot.com",
-  messagingSenderId: "309097191903",
-  appId: "1:309097191903:web:918213bfb6e181395ecc6a"
+  apiKey: "AIzaSyD9Aj6oNjh7w7974eaH44VC9UK0aQyEksI",
+  authDomain: "questions-for-interview-8367f.firebaseapp.com",
+  databaseURL: "https://questions-for-interview-8367f-default-rtdb.firebaseio.com",
+  projectId: "questions-for-interview-8367f",
+  storageBucket: "questions-for-interview-8367f.appspot.com",
+  messagingSenderId: "828906226144",
+  appId: "1:828906226144:web:3d002662a8141f7e766b85"
 };
-firebase.initializeApp(firebaseConfig);
+firebaseInitializeApp(firebaseConfig);
 
 ReactDOM.render(
   <App />,

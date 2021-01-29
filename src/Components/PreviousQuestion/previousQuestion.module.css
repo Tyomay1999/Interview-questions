@@ -68,7 +68,6 @@
     flex-basis: 3%;
   }
   .responsive-table .col-2 {
-    width: 400px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -76,7 +75,6 @@
     padding-right: 15px;
   }
   .responsive-table .col-3 {
-    width: 400px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -84,14 +82,28 @@
     padding-right: 15px;
   }
   .responsive-table .col-4 {
-    width: 400px;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
     padding-right: 15px;
   }
+  @media all and (min-width: 768px) {
+    .responsive-table .col-2 {
+      width: 400px;
+    }
+    .responsive-table .col-3 {
+      width: 400px;
+    }
+    .responsive-table .col-4 {
+      width: 400px;
+    }
+  }
   @media all and (max-width: 767px) {
+    
+    .previousQuestion{
+      overflow-x: hidden;
+    }
     .responsive-table .table-row {
       display: flex;
       justify-content: center;
@@ -124,11 +136,22 @@
       flex-direction: row;
       padding: 5px;
     }
+    .col{
+      font-size: 11px;
+      width: 100%;
+      text-align: center;
+    }
     .responsive-table .col:before {
       color: #6C7A89;
       padding-right: 10px;
       content: attr(data-label);
-      flex-basis: 50%;
       text-align: right;
+    }
+    .previousResult{
+      width: 100%;
+    }
+    .previousResult > p{
+      text-align: center;
+      font-size: 30px;
     }
   }

@@ -31,14 +31,13 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
     return (
         <section className={createUserModule.modal}>
             <div className={createUserModule.panel}>
-                {Errore ? <p>{Errore}</p> : ''}
+                {Errore ? <p className={createUserModule.errore}>{Errore}</p> : ''}
                 <p className={createUserModule.questionInput} >{isAdmin ? 'Admin' : 'User'}</p>
-                <input
-                    type="submit"
-                    value='change'
+                <div className={createUserModule.inputs}>
+                <button
                     onClick={() => { setIsAdmin(!isAdmin) }}
-                    className={createUserModule.questionAnswer}
-                />
+                    // className={createUserModule.questionAnswer}
+                >Change position</button>
                 <input
                     type="text"
                     placeholder='FirstName'
@@ -78,6 +77,7 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                     }}
                     className={createUserModule.questionAnswer}
                 />
+                </div>
                 <div className={createUserModule.buttons}>
                     <button
                         disabled={user ? true : (password ? false : true)}

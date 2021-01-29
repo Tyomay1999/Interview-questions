@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import questionTimerModule from './questionsTimer.module.css';
-import { plus, minus, getQuestionsTimerInfo, changeQuestionTimer } from '../../../functions'
+import { plus, minus, getQuestionsTimerInfo, changeQuestionTimer } from '../../../functions';
 
 const QuestionTimer = () => {
     const [time, setTimer] = useState(false);
     const [hour, setHour] = useState(0);
     const [minute, setMinute] = useState(30);
-    const [data,setData] = useState([]);
-    const [questionName,setQuestionName] = useState('Question Name');
-    
+    const [data, setData] = useState([]);
+    const [questionName, setQuestionName] = useState('Question Name');
+
     useEffect(() => {
         getQuestionsTimerInfo(setData)
     }, [time]);
-
     return (
         <section className={questionTimerModule.container}>
-           {
-                data.map(({name,timer})=> {
+            {
+                data.map(({ name, timer }, index) => {
                     return (
-                        <div className={`${questionTimerModule.card} ${questionTimerModule['card-1']}`}>
+                        <div className={`${questionTimerModule.card} ${questionTimerModule['card-1']}`} key={index}>
                             <h1>{name}</h1>
-                            <h2>{(timer.hour > 10) ? timer.hour : `0${timer.hour}`}h:{(timer.minute > 10) ? timer.minute : `0${timer.minute}`}m:00s</h2>
+                            <h2>
+                                {(timer.hour > 10) ? timer.hour : `0${timer.hour}`}h:
+                                {(timer.minute > 10) ? timer.minute : `0${timer.minute}`}m:00s
+                            </h2>
                             <button
                                 id={questionTimerModule.three}
                                 className={questionTimerModule.button}
@@ -34,8 +36,11 @@ const QuestionTimer = () => {
                         </div>
                     )
                 })
-           }
-            <div className={time ? questionTimerModule.modale : questionTimerModule.modal} id={questionTimerModule['modal-name']}>
+            }
+            <div
+                className={time ? questionTimerModule.modale : questionTimerModule.modal}
+                id={questionTimerModule['modal-name']}
+            >
                 <div className={questionTimerModule['modal-sandbox']}></div>
                 <div className={questionTimerModule['modal-box']}>
                     <div className={questionTimerModule['modal-header']}>
@@ -56,7 +61,7 @@ const QuestionTimer = () => {
                             <input
                                 type='number'
                                 onChange={(e) => {
-                                    (e.target.value) ? setHour(e.target.value) : setHour(0)
+                                    (e.target.value) ? setHour(+(e.target.value)) : setHour(0)
                                 }}
                                 value={(+hour)}
                                 className={questionTimerModule.input}
@@ -80,11 +85,12 @@ const QuestionTimer = () => {
                                 }}
                                 className={questionTimerModule.plus}
                             />
-                            <input 
+                            <input
                                 type='number'
                                 onChange={(e) => {
-                                    (e.target.value) ? setMinute(e.target.value) : setMinute(30)
-                                }} 
+                                    (+(e.target.value) !== 0 && (typeof (+(e.target.value)) === 'number')) ?
+                                        setMinute(+(e.target.value)) : setMinute(30)
+                                }}
                                 value={(+minute)}
                                 className={questionTimerModule.input}
                             />
@@ -107,7 +113,7 @@ const QuestionTimer = () => {
                             <button
                                 className={questionTimerModule['close-modal']}
                                 onClick={() => {
-                                    changeQuestionTimer(questionName,hour,minute)
+                                    changeQuestionTimer(questionName, hour, minute)
                                     setTimer(!time)
                                 }}
                             >Change</button>
