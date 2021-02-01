@@ -99,6 +99,15 @@ text-align: center;
     text-align: center;
     margin-bottom: 15px;
   }
+  .complexity, .quesTypes{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .complexity > button:disabled{
+    background-color: rgb(189, 189, 189);
+    color: black;
+  }
   .questionTypeButton{
       color: rgb(255, 255, 255);
       border: 1px solid black;

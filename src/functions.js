@@ -124,35 +124,76 @@ export const chackUser = ({
         setLoginErrorMessage('Email or password is none')
     }
 }
-export const getData = (setData, isLoading, loading, questionType, setTimerHour, setTimerMinute) => {
-    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}`).on("value", question => {
-        let questionlist = [];
-        const falseArray = [];
-        const info = [];
-        question.forEach(item => {
-            if (Array.isArray(item.val())) {
-                questionlist = item.val();
-            } else {
-                info.push(item.val())
-            }
-        });
-        info.forEach(item => {
-            if (typeof (item) === 'object') {
-                setTimerHour(item.hour);
-                setTimerMinute((item.minute > 0) ? item.minute - 1 : item.minute);
-            }
-        })
+export const getData = (setData, isLoading, loading, questionType, setTimerHour, setTimerMinute, complexity, language) => {
+    if (complexity) {
+        firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${language}`)
+            .on("value", question => {
+                const falseArray = [];
+                let questionlist = [];
+                question.forEach(item => {
+                    questionlist.push(item.val())
+                });
+                questionlist.forEach((item, index) => {
+                    item.id = index
+                })
+                for (let i = questionlist.length; i > 0; i--) {
+                    falseArray.push(questionlist[Math.floor(Math.random() * i)])
+                }
+                falseArray[falseArray.length] = { totalQuestion: questionlist.length }
+                setData(falseArray)
+                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}`).on("value", question => {
+                    const falseArray = [];
+                    let name = '';
+                    question.forEach(item => {
+                        falseArray.push(item.val())
+                    })
+                    falseArray.forEach((item, index) => {
+                        if (index === 1) {
+                            name = item;
+                        }
+                    })
+                })
+                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/timer`)
+                    .on("value", timer => {
+                        const time = [];
+                        timer.forEach(item => {
+                            time.push(item.val())
+                        })
+                        setTimerHour(time[0])
+                        setTimerMinute((time[1] > 0) ? time[1] - 1 : time[1]);
+                    })
+                isLoading(!loading)
+            })
+    } else {
+        firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}`).on("value", question => {
+            let questionlist = [];
+            const falseArray = [];
+            const info = [];
+            question.forEach(item => {
+                if (Array.isArray(item.val())) {
+                    questionlist = item.val();
+                } else {
+                    info.push(item.val())
+                }
+            });
+            info.forEach(item => {
+                if (typeof (item) === 'object') {
+                    setTimerHour(item.hour);
+                    setTimerMinute((item.minute > 0) ? item.minute - 1 : item.minute);
+                }
+            })
 
-        questionlist.forEach((item, index) => {
-            item.id = index
+            questionlist.forEach((item, index) => {
+                item.id = index
+            })
+            for (let i = questionlist.length; i > 0; i--) {
+                falseArray.push(questionlist[Math.floor(Math.random() * i)])
+            }
+            falseArray[falseArray.length] = { totalQuestion: questionlist.length }
+            setData(falseArray)
+            isLoading(!loading)
         })
-        for (let i = questionlist.length; i > 0; i--) {
-            falseArray.push(questionlist[Math.floor(Math.random() * i)])
-        }
-        falseArray[falseArray.length] = { totalQuestion: questionlist.length }
-        setData(falseArray)
-        isLoading(!loading)
-    })
+    }
 }
 
 const getResult = (trueAnswers, answers, getViewResult) => {
@@ -281,7 +322,7 @@ export const UserCreate = ({
     if (email && password && lastName && firstName) {
         firebaseAuth().createUserWithEmailAndPassword(email, password)
         firebaseDatabase().ref(`Users/${totalUsers + 1}`).update({
-            isNewUser:true,
+            isNewUser: true,
             isAdmin,
             id: (totalUsers + 1),
             firstName,
@@ -351,38 +392,38 @@ export const deleteUser = ({
     setNewUsers,
     email
 }) => {
-    if(email !== sessionStorage.email){
+    if (email !== sessionStorage.email) {
         userDeleter[0].totalUsers -= 1;
-    const falseArray = [];
-    userDeleter.forEach((item, index) => {
-        if (item.email === email) {
-            falseArray.push(userDeleter[0])
-            for (let i = 1; i < index; i++) {
-                userDeleter[i].id = i;
-                falseArray.push(userDeleter[i])
-            }
-            for (let i = index; i < userDeleter.length; i++) {
-                if (userDeleter[i + 1]) {
-                    userDeleter[i + 1].id = i;
-                    userDeleter[i] = userDeleter[i + 1];
-                    falseArray.push(userDeleter[i]);
+        const falseArray = [];
+        userDeleter.forEach((item, index) => {
+            if (item.email === email) {
+                falseArray.push(userDeleter[0])
+                for (let i = 1; i < index; i++) {
+                    userDeleter[i].id = i;
+                    falseArray.push(userDeleter[i])
                 }
+                for (let i = index; i < userDeleter.length; i++) {
+                    if (userDeleter[i + 1]) {
+                        userDeleter[i + 1].id = i;
+                        userDeleter[i] = userDeleter[i + 1];
+                        falseArray.push(userDeleter[i]);
+                    }
+                }
+            } else {
+                setErrore('dont have a this user')
             }
-        } else {
-            setErrore('dont have a this user')
-        }
-    })
-    firebaseDatabase().ref(`Users/${(userDeleter[0].totalUsers + 1)}`).remove();
-    firebaseDatabase().ref('Users').update(falseArray);
-    setLastName('');
-    setFirstName('');
-    setEmail('');
-    setPassword('');
-    setErrore('');
-    setLoading(!loading);
-    setUsers(true);
-    setNewUsers(false);
-    }else{
+        })
+        firebaseDatabase().ref(`Users/${(userDeleter[0].totalUsers + 1)}`).remove();
+        firebaseDatabase().ref('Users').update(falseArray);
+        setLastName('');
+        setFirstName('');
+        setEmail('');
+        setPassword('');
+        setErrore('');
+        setLoading(!loading);
+        setUsers(true);
+        setNewUsers(false);
+    } else {
         setErrore('You cannot delete yourself');
     }
 }
@@ -406,17 +447,21 @@ export const creater = ({
     newData,
     setNewData,
     setQuestions,
-    setNewQuestion
+    setNewQuestion,
+    complexity,
+    language
 }) => {
+    let languages = (language === 0) ? "EN" : (language === 1) ? "RU" : "HY";
     if (questionType) {
         if (question && answer1 && answer2 && answer3 && trueAnswer) {
             if (checker({ answer1, answer2, answer3, answer4, trueAnswer })) {
-                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).on('value', questions => {
-                    questions.forEach(item => {
-                        newData.push(item.val())
+                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}`)
+                    .on('value', questions => {
+                        questions.forEach(item => {
+                            newData.push(item.val())
+                        })
+                        setNewData(newData)
                     })
-                    setNewData(newData)
-                })
                 newData.push({
                     answers: [answer1, answer2, answer3, answer4],
                     question: question,
@@ -425,7 +470,8 @@ export const creater = ({
                     trueAnswer: trueAnswer
                 })
                 setNewData(newData)
-                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).update(newData)
+                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}`)
+                    .update(newData);
                 setQuestionType('');
                 setQuestion('')
                 setAnswer1('');
@@ -438,13 +484,19 @@ export const creater = ({
                 setQuestions(true)
                 setNewQuestion(false)
             } else {
-                setErrore('No correct answer was found in the answers')
+                setErrore((language === 0) ? 'No correct answer found in options'
+                    : (language === 1) ? "В вариантах не найдено правильного ответа"
+                        : "Տարբերակներում ճիշտ պատասխան չի գտնվել")
             }
         } else {
-            setErrore('Please write all line')
+            setErrore((language === 0) ? 'Please fill in all the lines'
+                : (language === 1) ? "Пожалуйста, заполните все строки"
+                    : "Խնդրում ենք լրացնել բոլոր տողերը")
         }
     } else {
-        setErrore('Please click to Question Type')
+        setErrore((language === 0) ? 'Please click to Question Type'
+            : (language === 1) ? "Пожалуйста, нажмите, чтобы выбрать тип вопроса"
+                : "Խնդրում ենք ընտրել հարցի տեսակը")
     }
 }
 
@@ -466,12 +518,15 @@ export const editQuestion = ({
     setErrore,
     id,
     setQuestions,
-    setNewQuestion
+    setNewQuestion,
+    complexity,
+    language
 }) => {
+    let languages = (language === 0) ? "EN" : (language === 1) ? "RU" : "HY";
     if (questionType) {
         if (question && answer1 && answer2 && answer3 && trueAnswer) {
             if (checker({ answer1, answer2, answer3, answer4, trueAnswer })) {
-                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}/${id}`).update({
+                firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}/${id}`).update({
                     question,
                     answers: [answer1, answer2, answer3, answer4],
                     trueAnswer,
@@ -489,13 +544,19 @@ export const editQuestion = ({
                 setQuestions(true);
                 setNewQuestion(false);
             } else {
-                setErrore('No correct answer was found in the answers')
+                setErrore((language === 0) ? 'No correct answer found in options'
+                    : (language === 1) ? "В вариантах не найдено правильного ответа"
+                        : "Տարբերակներում ճիշտ պատասխան չի գտնվել")
             }
         } else {
-            setErrore('Please write all line')
+            setErrore((language === 0) ? 'Please fill in all the lines'
+                : (language === 1) ? "Пожалуйста, заполните все строки"
+                    : "Խնդրում ենք լրացնել բոլոր տողերը")
         }
     } else {
-        setErrore('Please click to Question Type')
+        setErrore((language === 0) ? 'Please click to Question Type'
+            : (language === 1) ? "Пожалуйста, нажмите, чтобы выбрать тип вопроса"
+                : "Խնդրում ենք ընտրել հարցի տեսակը")
     }
 
 }
@@ -503,16 +564,20 @@ export const deleteQuestion = ({
     questionType,
     setQuestions,
     setNewQuestion,
-    id
+    id,
+    complexity,
+    language
 }) => {
-    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}/${id}`).remove()
-    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).on('value', questions => {
-        const questionsList = [];
-        questions.forEach(elem => {
-            questionsList.push(elem.val())
+    let languages = (language === 0) ? "EN" : (language === 1) ? "RU" : "HY";
+    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}/${id}`).remove()
+    firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}`)
+        .on('value', questions => {
+            const questionsList = [];
+            questions.forEach(elem => {
+                questionsList.push(elem.val())
+            })
+            firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/complexity/${complexity}/${languages}`).update(questionsList)
         })
-        firebaseDatabase().ref(`QuestionType/${questionType.toUpperCase()}/${questionType}`).update(questionsList)
-    })
     setQuestions(true)
     setNewQuestion(false)
 }
@@ -530,15 +595,16 @@ export const deleteQuestionType = ({
 export const addQuestionType = ({
     addedQuestionType,
     setAddedQuestionType,
-    setShowInput
+    setShowInput,
+    complexity
 }) => {
     firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}`).update({
         name: addedQuestionType,
-        timer: {
-            hour: 0,
-            minute: 30
-        }
     });
+    firebaseDatabase().ref(`QuestionType/${addedQuestionType.toUpperCase()}/complexity/${complexity}/timer`).update({
+        hour: 0,
+        minute: 30
+    })
     setShowInput(false);
     setAddedQuestionType('');
 }
@@ -557,9 +623,9 @@ export const userInformation = (email, history) => {
             sessionStorage.setItem('language', user.language);
             sessionStorage.setItem('lastName', user.lastName);
             sessionStorage.setItem('id', user.id);
-            if(user.isNewUser){
+            if (user.isNewUser) {
                 history.push('/info')
-            }else{
+            } else {
                 history.push('/questions')
             }
         }
@@ -579,13 +645,13 @@ export const getQuestionsTimerInfo = (setData) => {
     })
     setData(questionsList);
 }
-export const changeQuestionTimer = (name, hour, minute) => {
+export const changeQuestionTimer = (name, hour, minute, complexity) => {
     if (minute > 60) {
         hour = (+hour) + 1;
         minute = (+minute) - 60;
         changeQuestionTimer(name, hour, minute)
     } else {
-        firebaseDatabase().ref(`QuestionType/${name.toUpperCase()}/timer`).update({
+        firebaseDatabase().ref(`QuestionType/${name.toUpperCase()}/complexity/${complexity}/timer`).update({
             hour,
             minute
         })
@@ -607,7 +673,7 @@ export const minus = (prev) => {
     }
 }
 export const logOut = (history) => {
-    sendLanguage(sessionStorage.language)
+    sendLanguage(sessionStorage.language ? sessionStorage.language : 'EN' )
     sessionStorage.clear();
     localStorage.clear();
     history.push('/')

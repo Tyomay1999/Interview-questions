@@ -1,15 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import headerModule from './header.module.css';
 import { withRouter } from 'react-router-dom';
 import { logOut } from '../../functions';
 
 
 const Header = (props) => {
-    const {language, setLanguage,history} = props;
+    let { setLanguage, history } = props;
     const [firstName] = useState(sessionStorage.firstName ? sessionStorage.getItem('firstName') : '');
-    const [lastName] = useState(sessionStorage.lastName ? sessionStorage.getItem('lastName') : '')
-
-   
+    const [lastName] = useState(sessionStorage.lastName ? sessionStorage.getItem('lastName') : '');
+    const language = sessionStorage.language
     return (
         <section className={headerModule.navBar}>
             <nav className={headerModule.nav}>
@@ -28,20 +27,22 @@ const Header = (props) => {
                     <p>{lastName}</p>
                     {
                         setLanguage ?
-                        <div className={headerModule['ontrol-group']}>
-                        <div className={headerModule.select}>
-                            <select onChange={(e) => {
-                                sessionStorage.setItem('language', e.target.value);
-                                setLanguage(e.target.value);
-                            }}>
-                                <option selected={(sessionStorage.language === 'EN') ? 'selected' : ''}>EN</option>
-                                <option selected={(sessionStorage.language === 'RU') ? 'selected' : ''}>RU</option>
-                                <option selected={(sessionStorage.language === 'HY') ? 'selected' : ''}>HY</option>
-                            </select>
-                            <div className={headerModule.select__arrow}></div>
-                        </div>
-                    </div>
-                    : ''}
+                            <div className={headerModule['ontrol-group']}>
+                                <div className={headerModule.select}>
+                                    <select
+                                        defaultValue={(sessionStorage.language === 'EN') ? 'EN' : (sessionStorage.language === 'RU') ? 'RU' : 'HY'}
+                                        onChange={(e) => {
+                                            sessionStorage.setItem('language', e.target.value);
+                                            setLanguage(e.target.value);
+                                        }}>
+                                        <option>EN</option>
+                                        <option>RU</option>
+                                        <option>HY</option>
+                                    </select>
+                                    <div className={headerModule.select__arrow}></div>
+                                </div>
+                            </div>
+                            : ''}
                 </div>
                 <div>
                     <button

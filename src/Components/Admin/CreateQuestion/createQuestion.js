@@ -3,7 +3,8 @@ import createQuestionModule from './createQuestion.module.css'
 import { creater, editQuestion, deleteQuestion, addQuestionType, deleteQuestionType,firebaseDatabase } from '../../../functions';
 
 const CreateQuestion = (props) => {
-    const { setQuestions, setNewQuestion, Question } = props;
+    const { setQuestions, setNewQuestion, Question,languages } = props;
+    const [language, getLanguage] = useState(languages);
     const [allQuestionType, setAllQuestionType] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showInput, setShowInput] = useState(false);
@@ -17,7 +18,9 @@ const CreateQuestion = (props) => {
     const [answer4, setAnswer4] = useState(Question ? (Question.answers[3] ? Question.answers[3] : '') : '');
     const [newData, setNewData] = useState([]);
     const [Errore, setErrore] = useState('');
+    const [complexity, setComplexity] = useState(props.complexity ? props.complexity : Question.complexity ? Question.complexity : 'Easy');
     const [id] = useState(Question ? Question.id : 0);
+
 
     useEffect(() => {
         firebaseDatabase().ref('QuestionType').on("value", question => {
@@ -27,14 +30,44 @@ const CreateQuestion = (props) => {
             });
             setAllQuestionType(questionsList)
         })
-    }, [loading])
+        getLanguage(languages)
+    }, [loading,languages])
 
     return (
         <div className={createQuestionModule.modal}>
             <div className={createQuestionModule.panel}>
                 {Errore ? <p className={createQuestionModule.errore}>{Errore}</p> : ''}
+                <div className={createQuestionModule.complexity}>
+                <button className={createQuestionModule.questionTypeButton}
+                            disabled={(complexity === 'Easy') ? true : false}
+                            onClick={() => {
+                                setComplexity("Easy")
+                            }}
+                    >
+                    {(language === 0) ? "Easy" : (language === 1) ? "Лёгкий " : "Հեշտ"}
+                    </button>
+                    <button className={createQuestionModule.questionTypeButton}
+                                disabled={(complexity === 'Normal') ? true : false}
+                            onClick={() => {
+                                setComplexity("Normal")
+                            }}
+                    >
+                    {(language === 0) ? "Normal" : (language === 1) ? "Нормальный " : "Նորմալ"}
+                    </button>
+                    <button className={createQuestionModule.questionTypeButton}
+                                disabled={(complexity === 'Hard') ? true : false}
+                            onClick={() => {
+                                setComplexity("Hard")
+                            }}
+                    >
+                    {(language === 0) ? "Hard" : (language === 1) ? "Сложный " : "Բարդ"}
+                    </button>
+                </div>
                 <div className={createQuestionModule.questionType}>
-                    <p>{questionType ? questionType : 'Question type'}</p>
+                    <p>{questionType ? questionType :
+                        (language === 0) ? "Question type" :
+                        (language === 1) ? "Тип вопроса" : "Հարցի տեսակը"}
+                    </p>
                     <div className={createQuestionModule.questionTypeButtons}>
                         <form
                             className={createQuestionModule.forms}
@@ -75,8 +108,10 @@ const CreateQuestion = (props) => {
                                 setShowInput(!showInput)
                             }}
                             className={createQuestionModule.button}
-                        >{showInput ? "Close" : "Add"}</button>
+                        >{showInput ?  (language === 0) ? "Close" : (language === 1) ? "Закрыть" : "Փակել"
+                        : (language === 0) ? "Add" : (language === 1) ? "Добавить" : "Ավելացնել"}</button>
                         <input
+                            placeholder={(language === 0) ? "Write question type" : (language === 1) ? "Напишите тип вопроса" : "Գրեք հարցի տեսակը"}
                             onChange={(e) => {
                                 setAddedQuestionType(e.target.value)
                             }}
@@ -86,22 +121,26 @@ const CreateQuestion = (props) => {
                             } />
                     </div>
                 </div>
-                <p className={createQuestionModule.questionInput} >Question</p>
+                <p className={createQuestionModule.questionInput} >
+                    {(language === 0) ? "Question" : (language === 1) ? "Вопрос" : "Հարց"}
+                </p>
                 <textarea
                     disabled={showInput ? true : false}
                     type="textarea"
-                    placeholder='Question'
+                    placeholder={(language === 0) ? "Question" : (language === 1) ? "Вопрос" : "Հարց"}
                     value={question}
                     onChange={(e) => {
                         setQuestion(e.target.value)
                     }}
                     className={createQuestionModule.textarea}
                 />
-                <p className={createQuestionModule.ansvers}>Answers</p>
+                <p className={createQuestionModule.ansvers}>
+                {(language === 0) ? "Options" : (language === 1) ? "Варианты" : "Տարբերակներ"}
+                </p>
                 <input
                     disabled={showInput ? true : (question ? false : true)}
                     type="text"
-                    placeholder='Answer N1'
+                    placeholder={(language === 0) ? "Option N1" : (language === 1) ? "Вариант N1" : "Տարբերակ N1"}
                     value={answer1}
                     onChange={(e) => {
                         setAnswer1(e.target.value)
@@ -111,7 +150,7 @@ const CreateQuestion = (props) => {
                 <input
                     disabled={showInput ? true : (answer1 ? false : true)}
                     type="text"
-                    placeholder='Answer N2'
+                    placeholder={(language === 0) ? "Option N2" : (language === 1) ? "Вариант N2" : "Տարբերակ N2"}
                     value={answer2}
                     onChange={(e) => {
                         setAnswer2(e.target.value)
@@ -122,7 +161,7 @@ const CreateQuestion = (props) => {
                 <input
                     disabled={showInput ? true : (answer2 ? false : true)}
                     type="text"
-                    placeholder='Answer N3'
+                    placeholder={(language === 0) ? "Option N3" : (language === 1) ? "Вариант N3" : "Տարբերակ N3"}
                     value={answer3}
                     onChange={(e) => {
                         setAnswer3(e.target.value)
@@ -133,7 +172,7 @@ const CreateQuestion = (props) => {
                 <input
                     disabled={showInput ? true : (answer3 ? false : true)}
                     type="text"
-                    placeholder='Answer N4'
+                    placeholder={(language === 0) ? "Option N4" : (language === 1) ? "Вариант N4" : "Տարբերակ N4"}
                     value={answer4}
                     onChange={(e) => {
                         setAnswer4(e.target.value)
@@ -142,11 +181,13 @@ const CreateQuestion = (props) => {
 
                     className={createQuestionModule.questionAnswer}
                 />
-                <p className={createQuestionModule.trueAnswere}>True Answer</p>
+                <p className={createQuestionModule.trueAnswere}>
+                    {(language === 0) ? "Correct option" : (language === 1) ? "Правильный вариант" : "Ճիշտ տարբերակ"}
+                </p>
                 <input
                     disabled={showInput ? true : (answer2 ? false : true)}
                     type="text"
-                    placeholder='True answer'
+                    placeholder={(language === 0) ? "Correct option" : (language === 1) ? "Правильный вариант" : "Ճիշտ տարբերակ"}
                     value={trueAnswer}
                     onChange={(e) => {
                         setTrueAnswer(e.target.value)
@@ -154,7 +195,6 @@ const CreateQuestion = (props) => {
                     }}
                     className={createQuestionModule.questionAnswer}
                 />
-
                 <div className={createQuestionModule.buttons}>
                     <button
                         disabled={Question ? true : false}
@@ -163,7 +203,8 @@ const CreateQuestion = (props) => {
                                 addQuestionType({
                                     addedQuestionType,
                                     setAddedQuestionType,
-                                    setShowInput
+                                    setShowInput,
+                                    complexity
                                 });
                             } else {
                                 setLoading(!loading)
@@ -187,12 +228,16 @@ const CreateQuestion = (props) => {
                                     newData,
                                     setNewData,
                                     setQuestions,
-                                    setNewQuestion
+                                    setNewQuestion,
+                                    complexity,
+                                    language
                                 });
                             }
                         }}
                         className={createQuestionModule.button}
-                    >Create</button>
+                    >
+                        {(language === 0) ? "Add" : (language === 1) ? "Добавить" : "Ավելացնել"}
+                    </button>
                     <button
                         disabled={Question ? false : true}
                         onClick={() => {
@@ -214,11 +259,15 @@ const CreateQuestion = (props) => {
                                 setErrore,
                                 id,
                                 setQuestions,
-                                setNewQuestion
+                                setNewQuestion,
+                                complexity,
+                                language
                             })
                         }}
                         className={createQuestionModule.button}
-                    >Edite</button>
+                    >
+                        {(language === 0) ? "Save the change" : (language === 1) ? "Сохраните изменение" : "Պահպանել փոփոխությունը"}
+                    </button>
                     <button
                         disabled={(Question || questionType) ? false : true}
                         onClick={() => {
@@ -233,12 +282,16 @@ const CreateQuestion = (props) => {
                                     questionType,
                                     setQuestions,
                                     setNewQuestion,
-                                    id
+                                    id,
+                                    complexity,
+                                    language
                                 })
                             }
                         }}
                         className={createQuestionModule.button}
-                    >Delete</button>
+                    >
+                        {(language === 0) ? "Delete" : (language === 1) ? "Удалить" : "Ջնջել"}
+                    </button>
                 </div>
             </div>
         </div>

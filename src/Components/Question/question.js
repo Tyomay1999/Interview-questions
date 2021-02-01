@@ -8,7 +8,8 @@ import Header from '../Header/header';
 
 
 const Question = ({ history, location }) => {
-    const { questionType } = location;
+    const { questionType, complexity } = location;
+    const [language] = useState(sessionStorage.getItem('language'));
     const [questionNum, setQuestionNum] = useState(0);
     const [viewResult, getViewResult] = useState(0);
     const [answers, setAnswers] = useState([]);
@@ -22,10 +23,9 @@ const Question = ({ history, location }) => {
     const [timerHour, setTimerHour] = useState(0);
     const [timerMinute, setTimerMinute] = useState(29);
     const [timerSecond, setTimerSecond] = useState(59);
-    const [language,setLanguage] = useState(sessionStorage.getItem('language'));
 
     if (!data && questionType) {
-        getData(setData, isLoading, loading, questionType, setTimerHour, setTimerMinute)
+        getData(setData, isLoading, loading, questionType, setTimerHour, setTimerMinute,complexity,language)
     }
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -66,7 +66,7 @@ const Question = ({ history, location }) => {
         return () => {
             clearTimeout(timeout);
         }
-    }, [timerSecond, timerMinute,timerHour, result, trueAnswers, answers,questionType,question]);
+    }, [timerSecond, timerMinute, timerHour, result, trueAnswers, answers, questionType, question]);
 
     if (questionType === undefined) {
         return <Redirect to='/notFound' />
@@ -79,7 +79,7 @@ const Question = ({ history, location }) => {
 
     return (
         <>
-             <Header/>
+            <Header />
             <div className={questionModule.question}>
                 <div className={result ? `${questionModule.result}` : `${questionModule.close}`}>
                     <div className={questionModule.infoButons} >
@@ -87,10 +87,8 @@ const Question = ({ history, location }) => {
                             className={resultWindow ? `${questionModule.result}` : `${questionModule.close}`
                             }>
                             <h1>
-                            {(language === 'EN') ? `You typed ${viewResult} out of ` : (language === 'RU') ? `Вы набрали ${viewResult} из ` : `Դուք հավաքել եք ${viewResult}/`}
-
-                                 
-                            {data[(data.length - 1)].totalQuestion}
+                                {(language === 'EN') ? `You typed ${viewResult} out of ` : (language === 'RU') ? `Вы набрали ${viewResult} из ` : `Դուք հավաքել եք ${viewResult}/`}
+                                {data[(data.length - 1)].totalQuestion}
                             </h1>
                             <Link
                                 className={questionModule.button}
@@ -102,7 +100,7 @@ const Question = ({ history, location }) => {
                                     question
                                 }}
                             >
-                            {(language === 'EN') ? "See your answers to questions" : (language === 'RU') ? "Смотрите ваши ответы на вопросы" : "Մանրամասն"}
+                                {(language === 'EN') ? "See your answers to questions" : (language === 'RU') ? "Смотрите ваши ответы на вопросы" : "Մանրամասն"}
                             </Link>
                         </div>
                         <button
@@ -110,11 +108,11 @@ const Question = ({ history, location }) => {
                             onClick={() => {
                                 setResultWindow(!resultWindow)
                             }}>
-                        {(language === 'EN') ? "Result" : (language === 'RU') ? "Результат" : "Դիտել արդյունքը"}
-                                
-                                </button>
+                            {(language === 'EN') ? "Result" : (language === 'RU') ? "Результат" : "Դիտել արդյունքը"}
+
+                        </button>
                         <Link className={questionModule.button} to='/questions'>
-                        {(language === 'EN') ? "Back" : (language === 'RU') ? "Назад" : "Վերադառնալ"}
+                            {(language === 'EN') ? "Back" : (language === 'RU') ? "Назад" : "Վերադառնալ"}
                         </Link>
                     </div>
                 </div>
@@ -125,8 +123,8 @@ const Question = ({ history, location }) => {
                     <div className={questionModule.modal_background} key={questionNum + 1}>
                         <div className={questionModule.modal} >
                             <h2 className={questionModule.questionText} >
-                            {(language === 'EN') ? "Question " : (language === 'RU') ? "Вопрос " : "Հարց "}
-                            {(questionNum + 1)}/{data[(data.length - 1)].totalQuestion}
+                                {(language === 'EN') ? "Question " : (language === 'RU') ? "Вопрос " : "Հարց "}
+                                {(questionNum + 1)}/{data[(data.length - 1)].totalQuestion}
                             </h2 >
                             <div className={questionModule.resultQuestion}>
                                 {
@@ -201,7 +199,7 @@ const Question = ({ history, location }) => {
                                             return null
                                         })
                                             :
-                                    history.push('/questions')
+                                            history.push('/questions')
                                     }
                                 </form>
                             </div>
@@ -220,8 +218,35 @@ const Question = ({ history, location }) => {
                                         });
                                     }}
                                 >
-                            {(language === 'EN') ? "Complete and exit" : (language === 'RU') ? "Завершить и выйти" : "Ավարտել և դուրս գալ"}
+                                    {(language === 'EN') ? "Complete and exit" : (language === 'RU') ? "Завершить и выйти" : "Ավարտել և դուրս գալ"}
                                 </button>
+
+                                <button
+                                    className={questionModule.confirmAnswer}
+                                    onClick={() => {
+                                        nextQuestion({
+                                            data,
+                                            setRadioValue,
+                                            radioValue: 'No answer',
+                                            answers,
+                                            setAnswers,
+                                            trueAnswers,
+                                            setTrueAnswers,
+                                            questionNum,
+                                            setQuestionNum,
+                                            result,
+                                            setResult,
+                                            getViewResult,
+                                            totalQuestion: data[(data.length - 1)].totalQuestion,
+                                            question,
+                                            setQuestion,
+                                            questionType
+                                        });
+                                    }}
+                                >
+                                    {(language === 'EN') ? "No answer" : (language === 'RU') ? "Нет ответа" : "Չկա պատասխան "}
+                                </button>
+
                                 <button
                                     className={questionModule.confirmAnswer}
                                     disabled={radioValue ? '' : 'disabled'}
@@ -247,10 +272,10 @@ const Question = ({ history, location }) => {
                                     }}
                                 >
                                     {
-                                        (questionNum + 1 < data[(data.length - 1)].totalQuestion) ? 
-                                        `${(language === 'EN') ? "Next question" : (language === 'RU') ? "Следующий вопрос" : "Հաջորդ հարցը"}`
-                                            : 
-                                        `${(language === 'EN') ? "Finish" : (language === 'RU') ? "завершить" : "Ավարտել"}`
+                                        (questionNum + 1 < data[(data.length - 1)].totalQuestion) ?
+                                            `${(language === 'EN') ? "Next question" : (language === 'RU') ? "Следующий вопрос" : "Հաջորդ հարցը"}`
+                                            :
+                                            `${(language === 'EN') ? "Finish" : (language === 'RU') ? "завершить" : "Ավարտել"}`
                                     }
                                 </button>
                             </div>

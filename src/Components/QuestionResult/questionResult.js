@@ -1,4 +1,4 @@
-import React,{  useState } from 'react';
+import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import questionResultModule from './questionResult.module.css';
 
@@ -32,14 +32,20 @@ const QuestionResult = ({ history }) => {
               <li className={questionResultModule["table-row"]} key={index}>
                 <div className={`${questionResultModule.col} ${questionResultModule['col-1']}`} data-label="&#8470;">{index + 1}</div>
                 <div className={`${questionResultModule.col} ${questionResultModule['col-2']}`} data-label="Question:">{item}</div>
-                <div className={`${questionResultModule.col} ${questionResultModule['col-3']}`} data-label="Your answer:">{answers[index]}</div>
+                <div className={`${questionResultModule.col} ${questionResultModule['col-3']}`} data-label="Your answer:">
+                  {
+                    (answers[index] !== 'No answer') ? answers[index]
+                      :
+                      `${(language === 'EN') ? "No answer" : (language === 'RU') ? "Нет ответа" : "Չկա պատասխան "}`
+                  }
+                </div>
                 <div className={`${questionResultModule.col} ${questionResultModule['col-4']}`} data-label="Correct answer:">{trueAnswers[index]}</div>
               </li>
             )
           }) :
             <div className={questionResultModule.result}>
               <p>
-              {(language === 'EN') ? "You haven't result" : (language === 'RU') ? "У вас нет результата" : "Աարդյունքը բացակայում է"}
+                {(language === 'EN') ? "You haven't result" : (language === 'RU') ? "У вас нет результата" : "Աարդյունքը բացակայում է"}
               </p>
             </div>
           }

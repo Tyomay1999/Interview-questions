@@ -68,13 +68,15 @@ const Login = ({ history }) => {
             <header className={loginModule.Lang}>
                 <div className={loginModule['control-group']}>
                     <div className={loginModule.select}>
-                        <select onChange={(e) => { 
-                            setLanguage(e.target.value);
-                            sessionStorage.setItem('language',e.target.value)
-                         }}>
-                            <option selected={(sessionStorage.language === 'EN') ? 'selected' : ''}>EN</option>
-                            <option selected={(sessionStorage.language === 'RU') ? 'selected' : ''}>RU</option>
-                            <option selected={(sessionStorage.language === 'HY') ? 'selected' : ''}>HY</option>
+                        <select
+                            defaultValue={(sessionStorage.language === 'EN') ? 'EN' : (sessionStorage.language === 'RU') ? 'RU' : 'HY'}
+                            onChange={(e) => {
+                                setLanguage(e.target.value);
+                                sessionStorage.setItem('language', e.target.value)
+                            }}>
+                            <option>EN</option>
+                            <option>RU</option>
+                            <option>HY</option>
                         </select>
                         <div className={loginModule.select__arrow}></div>
                     </div>
@@ -177,7 +179,7 @@ const Login = ({ history }) => {
                                     }}
                                 />
 
-                                <h5>{(language === 'EN') ? "Remember me?" : (language === 'RU') ? "Запомнить меня?" : "Հիշել ինձ?"}</h5>
+                                <h5>{(language === 'EN') ? "Remember me?" : (language === 'RU') ? "Запомнить меня?" : "Հիշե՞լ ինձ"}</h5>
                             </form>
                             <p className={loginModule.errore}>{loginErrorMessage}</p>
                             <button

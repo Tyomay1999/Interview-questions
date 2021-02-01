@@ -80,16 +80,10 @@ a{
     right:0;
     margin:20px;
     padding: 10px;
-    background: #000;
-    border-radius: 5%; 
 }
-.close{
-  cursor: pointer;
-  color: #fce4ec;
-}
+
 #modal .modal-bg .modal-cont .close svg {
     width: 24px;
-    fill: #fff;
     vertical-align: top;
 }
 .control-group{
@@ -115,6 +109,15 @@ a{
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+  }
+  .close{
+    cursor: pointer;
+    color: #000000;
+    border: 1px solid black;
+  }
+  .close:hover{
+    color: rgb(255, 255, 255);
+    background-color: #000000;
   }
   .select select::-ms-expand {
     display: none;

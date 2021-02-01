@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import createUserModule from './createUser.module.css';
 import { UserCreate, editeUser, deleteUser, Reg, firebaseDatabase } from '../../../functions';
 
-const CreateUser = ({ setNewUsers, users, setUsers }) => {
+const CreateUser = ({ setNewUsers, users, setUsers,languages }) => {
     const { user } = users;
     const [loading, setLoading] = useState(false);
     const [isAdmin, setIsAdmin] = useState(user ? user.isAdmin : false);
@@ -13,7 +13,7 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
     const [Errore, setErrore] = useState('');
     const [totalUsers, changeTotalUsers] = useState(null);
     const [userDeleter, setUserDeleter] = useState([]);
-
+    const [language, getLanguage] = useState(languages);
 
     useEffect(() => {
         firebaseDatabase().ref('Users').on("value", question => {
@@ -25,22 +25,29 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
             if (dataList[0]) {
                 changeTotalUsers(dataList[0].totalUsers)
             }
+            getLanguage(languages)
         })
-    }, [loading])
+    }, [loading,languages])
 
     return (
         <section className={createUserModule.modal}>
             <div className={createUserModule.panel}>
                 {Errore ? <p className={createUserModule.errore}>{Errore}</p> : ''}
-                <p className={createUserModule.questionInput} >{isAdmin ? 'Admin' : 'User'}</p>
+                <p className={createUserModule.questionInput} >
+                {isAdmin ?
+                    ((language === 0) ? "Admin" : (language === 1) ? "Админ" : "Ադմին.")
+                    : ((language === 0) ? "User" : (language === 1) ? "Пользователь" : "Օգտվող")
+                    }
+                </p>
                 <div className={createUserModule.inputs}>
                 <button
                     onClick={() => { setIsAdmin(!isAdmin) }}
-                    // className={createUserModule.questionAnswer}
-                >Change position</button>
+                >
+                    {(language === 0) ? "Change position" : (language === 1) ? "Изменить позицию" : "Փոխել դիրքը"}
+                </button>
                 <input
                     type="text"
-                    placeholder='FirstName'
+                    placeholder={(language === 0) ? "First Name" : (language === 1) ? "Имя" : "Անուն"}
                     value={firstName}
                     onChange={(e) => {
                         setFirstName(e.target.value)
@@ -51,7 +58,7 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                     disabled={firstName ? false : true}
                     type="text"
                     value={lastName}
-                    placeholder='LastName'
+                    placeholder={(language === 0) ? "Last Name" : (language === 1) ? "Фамилия" : "Ազգանուն"}
                     onChange={(e) => {
                         setLastName(e.target.value)
                     }}
@@ -61,7 +68,7 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                     disabled={lastName ? false : true}
                     type="email"
                     value={email}
-                    placeholder='Email'
+                    placeholder={(language === 0) ? "Email" : (language === 1) ? "Эл. адрес" : "Էլ.հասցե"}
                     onChange={(e) => {
                         setEmail(e.target.value.toLocaleLowerCase())
                     }}
@@ -71,7 +78,7 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                     disabled={email ? false : true}
                     type="Password"
                     value={password}
-                    placeholder='Password'
+                    placeholder={(language === 0) ? "Password" : (language === 1) ? "Пароль" : "Գաղտնաբառ"}
                     onChange={(e) => {
                         setPassword(e.target.value)
                     }}
@@ -103,14 +110,17 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                                     setNewUsers
                                 });
                             } else {
-                                setErrore('Please check password or email addres')
+                                setErrore((language === 0) ? "Please check password or email addres" 
+                                : (language === 1) ? "Пожалуйста, проверьте пароль или адрес электронной почты" 
+                                : "Խնդրում ենք ստուգել գաղտնաբառը կամ էլ. Փոստի հասցեն")
                             }
                         }}
                         className={createUserModule.button}
-                    >Create</button>
+                    >
+                        {(language === 0) ? "Add" : (language === 1) ? "Добавить" : "Ավելացնել"}
+                        </button>
                     <button
                         disabled={user ? false : true}
-
                         onClick={() => {
                             if (Reg.emailReg.test(email) && Reg.passwordReg.test(password)) {
                                 setErrore('');
@@ -131,11 +141,16 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                                     setNewUsers
                                 });
                             } else {
-                                setErrore('Please check password or email addres')
+                                
+                                setErrore((language === 0) ? "Please check password or email addres" 
+                                : (language === 1) ? "Пожалуйста, проверьте пароль или адрес электронной почты" 
+                                : "Խնդրում ենք ստուգել գաղտնաբառը կամ էլ. Փոստի հասցեն")
                             }
                         }}
                         className={createUserModule.button}
-                    >Edite</button>
+                    >
+                        {(language === 0) ? "Save the change" : (language === 1) ? "Сохраните изменение" : "Պահպանել փոփոխությունը"}
+                        </button>
                     <button
                         disabled={user ? false : true}
                         onClick={() => {
@@ -155,7 +170,9 @@ const CreateUser = ({ setNewUsers, users, setUsers }) => {
                             })
                         }}
                         className={createUserModule.button}
-                    >Delete</button>
+                    >
+                        {(language === 0) ? "Delete" : (language === 1) ? "Удалить" : "Ջնջել"}
+                    </button>
                 </div>
             </div>
         </section>

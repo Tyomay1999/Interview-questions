@@ -16,18 +16,32 @@ const Admin = ({ history }) => {
   const [question, setQuestion] = useState(false);
   const [navBarIsOpen, setNavBarIsOpen] = useState(false);
   const [questionsTimer, setQuestionsTimer] = useState(false);
+  const [language, setLanguage] = useState(0);
+
 
   return (
     <div className={adminModule.admin}>
       <header>
-        <div className={adminModule.logo}>Questions<span>Admin</span></div>
+        <div className={adminModule.logo}>
+        {language === 0 ? "Administration" : language === 1 ? "Администрация" : "Ադմինիստրացիա"}
+        </div>
       </header>
-      <div className={adminModule.nav_btn} onClick={() => { setNavBarIsOpen(!navBarIsOpen) }}>Menu</div>
+      <div className={adminModule.nav_btn} onClick={() => { setNavBarIsOpen(!navBarIsOpen) }}>
+      {language === 0 ? "Menu" : language === 1 ? "Меню" : "Ընտրացանկ"}
+      </div>
       <div className={adminModule.container}>
         <div className={navBarIsOpen ? adminModule.sidebare : adminModule.sidebar}>
           <nav>
-            <b>Questions<span>Admin</span></b>
+            <b>
+              {language === 0 ? "Administration" : language === 1 ? "Администрация" : "Ադմինիստրացիա"}
+            </b>
             <ul className={adminModule.ul}>
+              <li
+                onClick={() => {
+                  setLanguage((language === 2) ? 0 : (language + 1))
+                }}>
+                <b>{language === 0 ? "EN" : language === 1 ? "RU" : "HY"}</b>
+              </li>
               <li
                 className={users ? adminModule.active : ''}
                 onClick={() => {
@@ -38,7 +52,9 @@ const Admin = ({ history }) => {
                   setNewQuestion(false);
                   setQuestionsTimer(false)
                 }}>
-                <b>Users</b></li>
+                <b>
+                  {language === 0 ? "Users" : language === 1 ? "Пользователи" : "Օգտագործողներ"}
+                </b></li>
               <li
                 className={newUsers ? adminModule.active : ''}
                 onClick={() => {
@@ -50,7 +66,9 @@ const Admin = ({ history }) => {
                   setUser(false);
                   setQuestionsTimer(false)
                 }}>
-                <b>Edit user</b></li>
+                <b>
+                  {language === 0 ? "Edit user" : language === 1 ? "Редактировать данные пользователя" : "Փոփոխել օգտագործողի տվյալները"}
+                </b></li>
               <li
                 className={questions ? adminModule.active : ''}
                 onClick={() => {
@@ -61,7 +79,9 @@ const Admin = ({ history }) => {
                   setNewQuestion(false);
                   setQuestionsTimer(false)
                 }}>
-                <b>Questions</b></li>
+                <b>
+                  {language === 0 ? "Questions" : language === 1 ? "Вопросы" : "Հարցեր"}
+                </b></li>
               <li
                 className={newQuestion ? adminModule.active : ''}
                 onClick={() => {
@@ -73,8 +93,10 @@ const Admin = ({ history }) => {
                   setQuestion(false);
                   setQuestionsTimer(false)
                 }}>
-                <b>Add or change a question</b></li>
-                <li
+                <b>
+                  {language === 0 ? "Add or change a questions" : language === 1 ? "Добавить или изменить вопросы" : "Ավելացնել կամ փոփոխել հարցերը"}
+                </b></li>
+              <li
                 className={questionsTimer ? adminModule.active : ''}
                 onClick={() => {
                   setNavBarIsOpen(false);
@@ -84,12 +106,16 @@ const Admin = ({ history }) => {
                   setNewQuestion(false);
                   setQuestionsTimer(true)
                 }}>
-                <b>Timer control</b></li>
+                <b>
+                  {language === 0 ? "Timer control" : language === 1 ? "Управления таймером" : "Թեստի ժամանակի փոփոխություն"}
+                </b></li>
               <li
                 onClick={() => {
                   logOut(history)
                 }}
-              ><b>Log out</b></li>
+              ><b>
+                  {(language === 0) ? "Log out" : (language === 1) ? "Выйти" : "Դուրս գալ"}
+                </b></li>
             </ul>
           </nav>
         </div>
@@ -101,23 +127,29 @@ const Admin = ({ history }) => {
               users={user}
               setUsers={setUsers}
               setUser={setUser}
+              languages={language}
             /> : ''}
           {users ? <Users
             setUsers={setUsers}
+            languages={language}
             setUser={setUser}
             setNewUsers={setNewUsers}
           /> : ''}
           {questions ? <Questions
             setQuestions={setQuestions}
+            languages={language}
             setNewQuestion={setNewQuestion}
             setQuestion={setQuestion}
           /> : ''}
           {newQuestion ? <CreateQuestion
             setQuestions={setQuestions}
+            languages={language}
             setNewQuestion={setNewQuestion}
             Question={question}
           /> : ''}
-          {questionsTimer ? <QuestionTimer/>: '' }
+          {questionsTimer ? <QuestionTimer
+            languages={language}
+          /> : ''}
         </div>
       </div>
     </div>
